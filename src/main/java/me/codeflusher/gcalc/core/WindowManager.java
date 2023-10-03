@@ -56,7 +56,6 @@ public class WindowManager {
             maximazed = true;
         }
 
-
         window = GLFW.glfwCreateWindow(width, height, title, MemoryUtil.NULL, MemoryUtil.NULL);
         LogSystem.log("Window instance", window );
         if (window == MemoryUtil.NULL){

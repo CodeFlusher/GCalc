@@ -5,4 +5,5 @@ public class Constants {
 
     public static float MOUSE_SENSITIVITY = 0.2f;
     public static Integer MODEL_SIZE = 25;
+    public static Integer RESOLUTION_REFERENCE = 500;
 }

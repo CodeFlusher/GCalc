@@ -35,7 +35,7 @@ public class Triangle {
     }
 
     public static ArrayList<Triangle> createTriangleMesh(ArrayList<Vertex> vertices, Integer resolutionX, Integer resolutionY){
-        LogSystem.debugLog("Mesh compute", "Computing triangle mesh");
+        //LogSystem.debugLog("Mesh compute", "Computing triangle mesh");
         ArrayList<Triangle> triangles = new ArrayList<>();
         for (int x = 0; x<resolutionX-1; x++){
                 for (int y = 0; y< resolutionY-1; y++){

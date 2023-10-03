@@ -10,6 +10,7 @@ public class GCalcCore {
 
     private static WindowManager window;
     private static GCalcActivity calcActivity;
+    private static EngineManager engine;
 
     public static void main(String[] args) {
         LogSystem.getInstance(true);
@@ -18,7 +19,7 @@ public class GCalcCore {
 
         calcActivity = new GCalcActivity();
 
-        EngineManager engine = new EngineManager();
+        engine = new EngineManager();
 
         try {
             engine.start();
@@ -31,6 +32,10 @@ public class GCalcCore {
 
     public static WindowManager getWindow() {
         return window;
+    }
+
+    public static EngineManager getEngine() {
+        return engine;
     }
 
     public static GCalcActivity getCalcActivity() {

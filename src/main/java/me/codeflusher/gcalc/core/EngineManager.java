@@ -16,6 +16,7 @@ public class EngineManager {
     private MouseInput mouseInput;
     private GLFWErrorCallback errorCallback;
     private ILogic logic;
+    private int frames = 0;
 
     private void init() throws Exception {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
@@ -37,7 +38,6 @@ public class EngineManager {
 
     private void run() {
         this.isRunning = true;
-        int frames = 0;
         long frameCounter = 0;
         long lastTime = System.nanoTime();
         double unprocessedTime = 0;
@@ -89,6 +89,10 @@ public class EngineManager {
     private void input() {
         mouseInput.input();
         logic.input();
+    }
+
+    public int getCurrentFrame() {
+        return frames;
     }
 
     private void render() {
