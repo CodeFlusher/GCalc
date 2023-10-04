@@ -15,15 +15,15 @@ public class EngineManager {
     private WindowManager window;
     private MouseInput mouseInput;
     private GLFWErrorCallback errorCallback;
-    private ILogic logic;
+    private IApplication logic;
     private int frames = 0;
 
     private void init() throws Exception {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
         window = GCalcCore.getWindow();
-        logic = GCalcCore.getCalcActivity();
+        logic = GCalcCore.getApplicationInstance();
         mouseInput = new MouseInput();
-        window.initializeWindow();
+        window.initializeLWJGUIWindow();
         logic.init();
         mouseInput.init();
     }

@@ -1,59 +1,55 @@
 package me.codeflusher.gcalc;
 
+import lwjgui.paint.Color;
+import lwjgui.scene.Scene;
+import lwjgui.scene.layout.HBox;
+import lwjgui.scene.layout.OpenGLPane;
+import lwjgui.scene.layout.Pane;
+import lwjgui.scene.layout.StackPane;
+import lwjgui.scene.layout.floating.StickyPane;
 import me.codeflusher.gcalc.core.*;
 import me.codeflusher.gcalc.entity.Model;
 import me.codeflusher.gcalc.entity.ObjectLoader;
 import me.codeflusher.gcalc.user.Camera;
 import me.codeflusher.gcalc.util.*;
 import org.joml.Math;
-import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWCharCallbackI;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL46;
 
-import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Stack;
 
-public class GCalcActivity implements ILogic {
+public class GCalcActivity implements IApplication {
 
-    private StringBuffer inputStringBuffer;
-    private boolean isAwaitingForInput;
     private Tristate isMovingGraph;
     private static final Float CAMERA_MOVEMENT_SPEED = 0.05f;
     private int updateCounter;
     private long totalTimeCounted;
-    private int direction = 0;
     private float color = 0.0f;
     private final RenderManager renderer;
     private final ObjectLoader loader;
-    private Model model;
-    private Camera camera;
-    Vector3f cameraInc;
+    private final AppScene scene;
+    private Vector3f cameraInc;
     private final WindowManager window;
 
     public GCalcActivity(){
         this.renderer = new RenderManager();
         this.window = GCalcCore.getWindow();
         this.loader = new ObjectLoader();
-        this.camera = new Camera();
-        this.inputStringBuffer = new StringBuffer();
-        isAwaitingForInput = false;
-        isMovingGraph = Tristate.RUN;
+        scene = new AppScene(new Map(), new Camera());
+        isMovingGraph = Tristate.AWAIT;
         //camera.setPosition(new Vector3f(20,20,20));
         cameraInc = new Vector3f(0,0,0);
     }
     @Override
     public void init() throws Exception {
         LogSystem.debugLog("Initalizing Activity", "init");
-        GLFW.glfwSetCharCallback(window.getWindow(), (window, codepoint) -> {
-            inputStringBuffer.append(Character.toChars(codepoint));
-        });
         updateCounter = 0;
         totalTimeCounted = 0;
         renderer.initializeRendering();
+
     }
 
     //(float) (10*Math.cos(x)+10*Math.sin(y))
@@ -84,7 +80,7 @@ public class GCalcActivity implements ILogic {
             }
         };
         loader.cleanup();
-        this.model = loader.loadModel(Utils.toFloatArray(vertFloats), Utils.toIntArray(tris));
+        scene.getMap().setActor(new Identifier("graph_model"), loader.loadModel(Utils.toFloatArray(vertFloats), Utils.toIntArray(tris)));
         long endTime = System.nanoTime() - startTime;
         //LogSystem.log("Mesh Compute", "Computed mesh in: " + endTime);
         totalTimeCounted +=endTime;
@@ -100,18 +96,6 @@ public class GCalcActivity implements ILogic {
     @Override
     public void input() {
        cameraInc.set(0,0,0);
-       if (window.isKeyPressed(GLFW.GLFW_KEY_ENTER)){
-           if(isAwaitingForInput){
-                LogSystem.log("Parsed input", inputStringBuffer.toString());
-           }
-           inputStringBuffer = new StringBuffer();
-           isAwaitingForInput = !isAwaitingForInput;
-
-       }
-
-        if (isAwaitingForInput){
-            return;
-        }
         if (window.isKeyPressed(GLFW.GLFW_KEY_W)){
             cameraInc.z = -1;
         }if (window.isKeyPressed(GLFW.GLFW_KEY_S)){
@@ -144,10 +128,10 @@ public class GCalcActivity implements ILogic {
             isMovingGraph = Tristate.STOP;
         }
 
-        camera.movePosition(cameraInc.x * CAMERA_MOVEMENT_SPEED, cameraInc.y*CAMERA_MOVEMENT_SPEED, cameraInc.z*CAMERA_MOVEMENT_SPEED);
+        scene.getCamera().movePosition(cameraInc.x * CAMERA_MOVEMENT_SPEED, cameraInc.y*CAMERA_MOVEMENT_SPEED, cameraInc.z*CAMERA_MOVEMENT_SPEED);
         if (input.isRightButtonPressed()){
             Vector2f rotationVector = input.getDisplayVector();
-            camera.moveRotation(rotationVector.x * Constants.MOUSE_SENSITIVITY, rotationVector.y * Constants.MOUSE_SENSITIVITY, 0f);
+           scene.getCamera().moveRotation(rotationVector.x * Constants.MOUSE_SENSITIVITY, rotationVector.y * Constants.MOUSE_SENSITIVITY, 0f);
         }
     }
 
@@ -158,11 +142,39 @@ public class GCalcActivity implements ILogic {
             window.setResizeable(true);
         }
         window.setClearColor(color, color, color, 0.0f);
-        renderer.render(model, camera);
+    }
+
+    public RenderManager getRenderer() {
+        return renderer;
     }
 
     @Override
     public void cleanup() {
         renderer.cleanup();
+    }
+
+    @Override
+    public AppScene getScene() {
+        return scene;
+    }
+
+    @Override
+    public void createUI(Scene scene) {
+        HBox root = new HBox();
+
+
+        OpenGLPane glPane = new OpenGLPane();
+        glPane.setBackgroundLegacy(new Color(0,0,0,0));
+        glPane.setRendererCallback(renderer);
+
+        glPane.setPrefSize(800,600);
+
+        root.getChildren().add(glPane);
+
+        root.setMinSize(1600, 1200);
+
+        scene.setRoot(root);
+
+
     }
 }

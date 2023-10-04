@@ -1,9 +1,7 @@
 package me.codeflusher.gcalc.util;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.logging.Logger;
 
 public class LogSystem {
     private static class Logger {

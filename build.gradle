@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.20-Beta2'
 }
 
 project.ext.lwjglVersion = "3.2.3"
@@ -12,17 +13,21 @@ version = '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
     implementation "org.joml:joml:${jomlVersion}"
     implementation "org.joml:joml-primitives:${jomlPrimVersion}"
+
+    implementation 'com.github.orange451:LWJGUI:pre-mt'
 
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-assimp"
@@ -88,9 +93,13 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-sse::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-tinyexr::$lwjglNatives"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
 }
 
 test {
     useJUnitPlatform()
+}
+kotlin {
+    jvmToolchain(20)
 }

@@ -1,8 +1,6 @@
 package me.codeflusher.gcalc.core;
 
-import com.sun.tools.javac.Main;
 import me.codeflusher.gcalc.GCalcCore;
-import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 

@@ -1,8 +1,6 @@
 package me.codeflusher.gcalc.entity;
 
-import me.codeflusher.gcalc.util.LogSystem;
 import me.codeflusher.gcalc.util.Utils;
-import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL46;
 
 import java.nio.FloatBuffer;
