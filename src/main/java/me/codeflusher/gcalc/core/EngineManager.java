@@ -1,6 +1,8 @@
 package me.codeflusher.gcalc.core;
 
 import me.codeflusher.gcalc.GCalcCore;
+import me.codeflusher.gcalc.core.application.IApplication;
+import me.codeflusher.gcalc.core.application.MouseInput;
 import me.codeflusher.gcalc.util.Constants;
 import me.codeflusher.gcalc.util.LogSystem;
 import org.lwjgl.glfw.GLFW;

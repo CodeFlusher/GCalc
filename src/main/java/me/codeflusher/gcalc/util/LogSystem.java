@@ -38,7 +38,7 @@ public class LogSystem {
         logRunnable.run(namespace, object);
     }
     public static void debugLog(String namespace, Object object){
-        debugRunnable.run(namespace, object);
+        debugRunnable.run("DEBUG | "+namespace, object);
     }
 
 }

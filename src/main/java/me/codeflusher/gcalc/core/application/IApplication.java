@@ -1,4 +1,4 @@
-package me.codeflusher.gcalc.core;
+package me.codeflusher.gcalc.core.application;
 
 import lwjgui.scene.Scene;
 

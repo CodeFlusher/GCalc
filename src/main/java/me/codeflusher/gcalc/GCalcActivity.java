@@ -1,15 +1,26 @@
 package me.codeflusher.gcalc;
 
+import lwjgui.event.ActionEvent;
+import lwjgui.event.EventHandler;
+import lwjgui.event.EventHelper;
+import lwjgui.event.MouseEvent;
+import lwjgui.geometry.Insets;
 import lwjgui.paint.Color;
 import lwjgui.scene.Scene;
-import lwjgui.scene.layout.HBox;
-import lwjgui.scene.layout.OpenGLPane;
-import lwjgui.scene.layout.Pane;
-import lwjgui.scene.layout.StackPane;
-import lwjgui.scene.layout.floating.StickyPane;
+import lwjgui.scene.control.Button;
+import lwjgui.scene.control.TextField;
+import lwjgui.scene.layout.*;
+import me.codeflusher.gcalc.config.Config;
+import me.codeflusher.gcalc.config.ConfigManager;
 import me.codeflusher.gcalc.core.*;
-import me.codeflusher.gcalc.entity.Model;
+import me.codeflusher.gcalc.core.application.AppScene;
+import me.codeflusher.gcalc.core.application.IApplication;
+import me.codeflusher.gcalc.core.application.Map;
+import me.codeflusher.gcalc.core.application.MouseInput;
 import me.codeflusher.gcalc.entity.ObjectLoader;
+import me.codeflusher.gcalc.mesh.Triangle;
+import me.codeflusher.gcalc.mesh.Vertex;
+import me.codeflusher.gcalc.mesh.VertexSolver;
 import me.codeflusher.gcalc.user.Camera;
 import me.codeflusher.gcalc.util.*;
 import org.joml.Math;
@@ -19,7 +30,6 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL46;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class GCalcActivity implements IApplication {
 
@@ -160,21 +170,43 @@ public class GCalcActivity implements IApplication {
 
     @Override
     public void createUI(Scene scene) {
-        HBox root = new HBox();
-
+        VBox root = new VBox();
+        scene.setRoot(root);
 
         OpenGLPane glPane = new OpenGLPane();
         glPane.setBackgroundLegacy(new Color(0,0,0,0));
         glPane.setRendererCallback(renderer);
 
-        glPane.setPrefSize(800,600);
+        Config config = ConfigManager.getConfig();
 
-        root.getChildren().add(glPane);
+        HBox row1 = new HBox();
+        HBox row2 = new HBox();
+        HBox row3 = new HBox();
 
-        root.setMinSize(1600, 1200);
 
-        scene.setRoot(root);
+        EventHandler<ActionEvent> eventHandler = event -> this.isMovingGraph = this.isMovingGraph.getInversed();
 
+        Button toggleDynamicGraph = new Button("Toggle dynamic graph");
+        toggleDynamicGraph.setPrefSize((int) (config.getResolutionX()*0.05),(int) (config.getResolutionX()*0.05));
+        toggleDynamicGraph.setOnAction(eventHandler);
+
+        TextField functionTextField = new TextField();
+        functionTextField.setPrefSize((int) (config.getResolutionX()*0.05),(int) (config.getResolutionX()*0.05));
+
+        int insetValue = 15;
+        Insets insets = new Insets(insetValue);
+
+        row1.getChildren().addAll(toggleDynamicGraph);
+        row1.setPadding(insets);
+
+        row2.getChildren().addAll(functionTextField);
+        row2.setPadding(insets);
+
+        glPane.setPrefSize(config.getResolutionX(),Math.floor((float)config.getResolutionY()*0.75));
+
+        root.getChildren().addAll(glPane,row1,row2);
+
+        root.setMinSize(config.getResolutionX(), config.getResolutionY());
 
     }
 }

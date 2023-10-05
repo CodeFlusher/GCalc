@@ -2,12 +2,12 @@ package me.codeflusher.gcalc.core;
 
 import lwjgui.scene.Context;
 import me.codeflusher.gcalc.GCalcCore;
+import me.codeflusher.gcalc.core.application.AppScene;
+import me.codeflusher.gcalc.core.application.IApplication;
 import me.codeflusher.gcalc.entity.Model;
-import me.codeflusher.gcalc.user.Camera;
 import me.codeflusher.gcalc.util.Identifier;
 import me.codeflusher.gcalc.util.Transformation;
 import me.codeflusher.gcalc.util.Utils;
-import org.lwjgl.nanovg.NanoVGGL2;
 import org.lwjgl.opengl.GL46;
 
 public class RenderManager implements IGRender {

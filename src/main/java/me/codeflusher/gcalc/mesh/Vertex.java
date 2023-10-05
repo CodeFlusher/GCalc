@@ -1,4 +1,4 @@
-package me.codeflusher.gcalc.util;
+package me.codeflusher.gcalc.mesh;
 
 public class Vertex {
     public final float x;

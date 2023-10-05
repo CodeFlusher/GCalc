@@ -4,25 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e8485051-b267-49fb-8992-63e323d800ee" name="Changes" comment="Updated some code and fixing some problems. Preparing for new functionality.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/AppScene.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/Map.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Config.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/ConfigManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Identifier.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
+    <list default="true" id="e8485051-b267-49fb-8992-63e323d800ee" name="Changes" comment="Structure rework and preparing for ui development">
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/config/Config.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/GCalcActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/GCalcActivity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/GCalcCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/GCalcCore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/AppScene.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/AppScene.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/EngineManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/EngineManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/ILogic.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/IApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/MouseInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/MouseInput.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/IApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/IApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/Map.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/MouseInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/MouseInput.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/RenderManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/RenderManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/WindowManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/WindowManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/entity/ObjectLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/entity/ObjectLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Config.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/ConfigManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/config/ConfigManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/LogSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/LogSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/VertexSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/VertexSolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/mesh/Triangle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Vertex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/mesh/Vertex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/VertexSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/mesh/VertexSolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shader/fragment.fsh" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shader/fragment.fsh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/shader/vertex.vsh" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shader/vertex.vsh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,8 +55,8 @@
       <list>
         <option value="Enum" />
         <option value="Interface" />
-        <option value="Kotlin Data Class" />
         <option value="Class" />
+        <option value="Kotlin Data Class" />
       </list>
     </option>
   </component>
@@ -75,6 +76,9 @@
         <option name="url" value="https://github.com/CodeFlusher/GCalc.git" />
       </UrlAndAccount>
     </option>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.orange451/LWJGUI/pre-mt/5646b96eb636afb98c6a63a11a6f3f79e95b41ec/LWJGUI-pre-mt-sources.jar!/lwjgui/scene/Node.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -105,6 +109,12 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="me.codeflusher.gcalc.core.application" />
+      <recent name="me.codeflusher.gcalc.config" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.GCalcCore">
     <configuration name="GCalcCore" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="20" />
@@ -129,7 +139,7 @@
             <option value="build" />
           </list>
         </option>
-        <option name="vmOptions" value="--enable-preview" />
+        <option name="vmOptions" value="" />
       </ExternalSystemSettings>
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
@@ -164,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1696340190593</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Structure rework and preparing for ui development">
+      <option name="closed" value="true" />
+      <created>1696427453637</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1696427453637</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -197,7 +215,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Updated some code and fixing some problems. Preparing for new functionality." />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated some code and fixing some problems. Preparing for new functionality." />
+    <MESSAGE value="Structure rework and preparing for ui development" />
+    <option name="LAST_COMMIT_MESSAGE" value="Structure rework and preparing for ui development" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

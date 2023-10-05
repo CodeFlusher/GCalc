@@ -1,4 +1,4 @@
-package me.codeflusher.gcalc.util;
+package me.codeflusher.gcalc.mesh;
 
 import java.util.ArrayList;
 

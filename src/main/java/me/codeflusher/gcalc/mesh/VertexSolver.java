@@ -1,4 +1,7 @@
-package me.codeflusher.gcalc.util;
+package me.codeflusher.gcalc.mesh;
+
+import me.codeflusher.gcalc.util.Constants;
+import me.codeflusher.gcalc.util.LogSystem;
 
 import java.util.ArrayList;
 import java.util.List;
