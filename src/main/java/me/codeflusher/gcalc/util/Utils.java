@@ -10,18 +10,19 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Utils {
-    public static FloatBuffer storeDatgaInFloatBuffer(float[] data){
+    public static FloatBuffer storeDatgaInFloatBuffer(float[] data) {
         FloatBuffer fb = MemoryUtil.memAllocFloat(data.length);
         fb.put(data).flip();
         return fb;
     }
-    public static IntBuffer storeDatgaInIntBuffer(int[] data){
+
+    public static IntBuffer storeDatgaInIntBuffer(int[] data) {
         IntBuffer buffer = MemoryUtil.memAllocInt(data.length);
         buffer.put(data).flip();
         return buffer;
     }
 
-    public static float[] toFloatArray(List<Float> floatList){
+    public static float[] toFloatArray(List<Float> floatList) {
         float[] floatArray = new float[floatList.size()];
         int i = 0;
 
@@ -30,7 +31,8 @@ public class Utils {
         }
         return floatArray;
     }
-    public static int[] toIntArray(List<Integer> integers){
+
+    public static int[] toIntArray(List<Integer> integers) {
         int[] intArray = new int[integers.size()];
         int i = 0;
 
@@ -40,12 +42,12 @@ public class Utils {
         return intArray;
     }
 
-    public static String loadResources(String filename) throws Exception{
+    public static String loadResources(String filename) throws Exception {
         String result;
-        try(InputStream in = Utils.class.getResourceAsStream(filename);
-            Scanner scanner = new Scanner(in, StandardCharsets.UTF_8.name())){
+        try (InputStream in = Utils.class.getResourceAsStream(filename);
+             Scanner scanner = new Scanner(in, StandardCharsets.UTF_8)) {
             result = scanner.useDelimiter("\\A").next();
-            }
-        return  result;
+        }
+        return result;
     }
 }

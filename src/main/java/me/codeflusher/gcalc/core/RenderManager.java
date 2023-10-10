@@ -5,19 +5,18 @@ import me.codeflusher.gcalc.GCalcCore;
 import me.codeflusher.gcalc.core.application.AppScene;
 import me.codeflusher.gcalc.core.application.IApplication;
 import me.codeflusher.gcalc.entity.Model;
-import me.codeflusher.gcalc.util.Identifier;
+import me.codeflusher.gcalc.util.Constants;
 import me.codeflusher.gcalc.util.Transformation;
 import me.codeflusher.gcalc.util.Utils;
 import org.lwjgl.opengl.GL46;
 
 public class RenderManager implements IGRender {
-    private final WindowManager window;
+    private final GAppWindowManager window;
     private ShaderManager shader;
     private IApplication application;
 
-    public RenderManager(){
-        window = GCalcCore.getWindow();
-
+    public RenderManager() {
+        window = GCalcCore.getWindowManager();
     }
 
     @Override
@@ -28,17 +27,21 @@ public class RenderManager implements IGRender {
         shader.link();
         shader.creteUniform("projectionMatrix");
         shader.creteUniform("viewMatrix");
+
+        GL46.glDisable(GL46.GL_CULL_FACE);
+
         this.application = GCalcCore.getApplicationInstance();
     }
 
-    public void drawAxes(){
-    
+    public void drawAxes() {
+
     }
-    public void clear(){
+
+    public void clear() {
         GL46.glClear(GL46.GL_COLOR_BUFFER_BIT | GL46.GL_DEPTH_BUFFER_BIT);
     }
 
-    public void cleanup(){
+    public void cleanup() {
         shader.cleanup();
     }
 
@@ -48,7 +51,7 @@ public class RenderManager implements IGRender {
         shader.bind();
 
         AppScene scene = application.getScene();
-        Model model = scene.getMap().getActor(new Identifier("graph_model"));
+        Model model = scene.getMap().getActor(Constants.MODEL_IDENTIFIER);
 
         shader.setUniform("projectionMatrix", window.updateProjectionMatrix());
         shader.setUniform("viewMatrix", Transformation.getViewMatrix(scene.getCamera()));

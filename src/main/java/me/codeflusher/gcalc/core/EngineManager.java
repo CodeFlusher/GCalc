@@ -1,5 +1,6 @@
 package me.codeflusher.gcalc.core;
 
+import lwjgui.scene.Window;
 import me.codeflusher.gcalc.GCalcCore;
 import me.codeflusher.gcalc.core.application.IApplication;
 import me.codeflusher.gcalc.core.application.MouseInput;
@@ -12,67 +13,78 @@ public class EngineManager {
     public static final long NANOSECOND = 1000000000;
     private static final float FRAMERATE = 1000;
     private static int fps;
-    private static float frametime = 1/ FRAMERATE;
+    private static final float frametime = 1 / FRAMERATE;
     private boolean isRunning;
-    private WindowManager window;
+    private GAppWindowManager windowManager;
     private MouseInput mouseInput;
     private GLFWErrorCallback errorCallback;
     private IApplication logic;
     private int frames = 0;
 
-    private void init() throws Exception {
+    public static int getFps() {
+        return fps;
+    }
+
+    public static void setFps(int fps) {
+        EngineManager.fps = fps;
+    }
+
+    public void init() {
         GLFW.glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
-        window = GCalcCore.getWindow();
+        windowManager = GCalcCore.getWindowManager();
+
         logic = GCalcCore.getApplicationInstance();
         mouseInput = new MouseInput();
-        window.initializeLWJGUIWindow();
-        logic.init();
+        windowManager.initializeLWJGUIWindow();
+        logic.setMouseInput(mouseInput);
+        try {
+            logic.init();
+        } catch (Exception e) {
+            LogSystem.exception("Engine Thread", e);
+        }
         mouseInput.init();
     }
 
-    public void start() throws Exception {
+    public void startEngine() {
         this.init();
         if (isRunning) {
             return;
         }
-        this.run();
+        this.runWindow();
     }
 
-    private void run() {
-        this.isRunning = true;
+    public void runWindow() {
         long frameCounter = 0;
         long lastTime = System.nanoTime();
         double unprocessedTime = 0;
-        while (isRunning){
+        LogSystem.log("Engine loop", "Running the engine!");
+        while (!windowManager.windowShouldClose()) {
             boolean render = false;
             long startTime = System.nanoTime();
             long passedTime = startTime - lastTime;
             lastTime = startTime;
             input();
 
-            unprocessedTime += passedTime/(double) NANOSECOND;
+            unprocessedTime += passedTime / (double) NANOSECOND;
             frameCounter += passedTime;
 
             //input
 
-            while (unprocessedTime>frametime){
+            while (unprocessedTime > frametime) {
                 render = true;
                 unprocessedTime -= frametime;
 
                 //LogSystem.debugLog("Engine loop", ((Double)unprocessedTime).toString() + " " + frametime);
 
-                if (window.windowShouldClose())
-                    stop();
-
-                if (frameCounter>=NANOSECOND) {
+                if (frameCounter >= NANOSECOND) {
                     setFps(frames);
-                    window.setTitle(Constants.APP_NAME + " | FPS: "+ frames);
+                    windowManager.setTitle(Constants.APP_NAME + " | FPS: " + frames);
 
                     frames = 0;
                     frameCounter = 0;
                 }
             }
-            if (render){
+            if (render) {
                 update();
                 render();
                 frames++;
@@ -80,13 +92,8 @@ public class EngineManager {
         }
         cleanup();
     }
-    private void stop() {
-        if (!isRunning){
-            return;
-        }
-        LogSystem.log("Engine Loop", "Shutdown!");
-        isRunning = false;
-    }
+
+
 
     private void input() {
         mouseInput.input();
@@ -99,27 +106,20 @@ public class EngineManager {
 
     private void render() {
         logic.render();
-        window.update();
+        windowManager.update();
     }
 
-    private void update(){
-        logic.update(mouseInput);
+    public void update() {
+        logic.update();
+        windowManager.update();
     }
 
-    private void cleanup(){
+    private void cleanup() {
         logic.cleanup();
         LogSystem.log("Engine Loop", "Cleaning up after engine execution");
-        window.cleanup();
+//        window.cleanup();
         errorCallback.free();
-        GLFW.glfwTerminate();
-    }
-
-    public static int getFps() {
-        return fps;
-    }
-
-    public static void setFps(int fps) {
-        EngineManager.fps = fps;
+//        GLFW.glfwTerminate();
     }
 
 

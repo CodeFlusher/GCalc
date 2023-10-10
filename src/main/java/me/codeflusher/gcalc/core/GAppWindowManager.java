@@ -2,105 +2,104 @@ package me.codeflusher.gcalc.core;
 
 import lwjgui.LWJGUI;
 import lwjgui.LWJGUIUtil;
-import lwjgui.scene.Context;
-import lwjgui.scene.Node;
 import lwjgui.scene.Scene;
 import lwjgui.scene.Window;
-import lwjgui.scene.layout.OpenGLPane;
-import lwjgui.scene.layout.StackPane;
 import me.codeflusher.gcalc.GCalcCore;
 import me.codeflusher.gcalc.config.Config;
 import me.codeflusher.gcalc.config.ConfigManager;
+import me.codeflusher.gcalc.util.Constants;
 import me.codeflusher.gcalc.util.LogSystem;
 import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.GL46;
 import org.lwjgl.system.MemoryUtil;
 
-public class WindowManager {
+public class GAppWindowManager {
     public static final Float FOV = (float) Math.toRadians(60);
     public static final Float Z_NEAR = 0.01f;
     public static final Float Z_FAR = 1000f;
     private final String title;
-    private long window;
-    private boolean resizeable;
     private final Matrix4f projectionMatrix;
+    private long window;
     private Window lwjguiWindow;
+    private boolean resizeable;
 
-    public WindowManager(String title) {
+    public GAppWindowManager(String title) {
         this.title = title;
         projectionMatrix = new Matrix4f();
     }
 
-    public void initializeLWJGUIWindow(){
+    public void initializeLWJGUIWindow() {
 
         GLFWErrorCallback.createPrint(System.err).set();
 
-        if (!GLFW.glfwInit()){
+        if (!GLFW.glfwInit()) {
             throw new IllegalStateException("Failed to initialize the GLFW");
         }
 
-        Config config = ConfigManager.getConfig();
+        window = LWJGUIUtil.createOpenGLCoreWindow(Constants.APP_NAME, 1,1, true, true);
 
-        window = LWJGUIUtil.createOpenGLCoreWindow(title, config.getResolutionX(), config.getResolutionY(), true, true, config.getVSync());
-
-        LogSystem.log("Window instance", window );
-        if (window == MemoryUtil.NULL){
+        LogSystem.log("Window instance", window);
+        if (window == MemoryUtil.NULL) {
             throw new RuntimeException("Failed to create GLFW window");
         }
-        lwjguiWindow = LWJGUI.initialize(window);
 
-        GCalcCore.getApplicationInstance().createUI(lwjguiWindow.getScene());
+        this.lwjguiWindow = LWJGUI.initialize(window);
 
-        lwjguiWindow.show();
+        lwjguiWindow.setResizible(false);
+        var config = ConfigManager.getConfig();
 
+        this.show();
+
+        lwjguiWindow.setScene(new Scene(GCalcCore.getApplicationInstance().createUI(), config.getResolutionX(),config.getResolutionY()));
         LogSystem.log("Window", "Finalized to initialize the window");
     }
-    public void update(){
-//        GLFW.glfwSwapBuffers(window);
-//        GLFW.glfwPollEvents();
-        int height = lwjguiWindow.getContext().getHeight();
-        int width = lwjguiWindow.getContext().getWidth();
+
+    public void update() {
+        Window lwjguiWindow = GCalcCore.getLwjguiWindow();
+        int height = getHeight();
+        int width = getWidth();
         Config config = ConfigManager.getConfig();
-        if (config.getResolutionX() != width || config.getResolutionY() != height){
+        if (config.getResolutionX() != width || config.getResolutionY() != height) {
             LogSystem.debugLog("TestHeight", height + " " + config.getResolutionY());
             LogSystem.debugLog("TestHeight", width + " " + config.getResolutionX());
             try {
-                ConfigManager.writeConfig(new Config(config.getVSync(), config.getLatestPrompt(), config.getASliderState(), config.getRangeX(), config.getRangeY(), config.getRangeZ(), width, height,config.getDebug()));
-                lwjguiWindow.getScene().setRoot(new StackPane());
+                ConfigManager.writeConfig(new Config(config.getVSync(), config.getLatestPrompt(), config.getASliderState(), config.getRangeX(), config.getRangeY(), config.getRangeZ(), width, height, config.getDebug()));
                 ConfigManager.loadConfigFromDisk();
-                GCalcCore.getApplicationInstance().createUI(lwjguiWindow.getScene());
-            } catch (Exception e){
+                config = ConfigManager.getConfig();
+                lwjguiWindow.setScene(new Scene(GCalcCore.getApplicationInstance().createUI(), config.getResolutionX(), config.getResolutionY()));
+            } catch (Exception e) {
                 LogSystem.log("Window", "Failed to update config.");
             }
         }
+
         LWJGUI.render();
+//        lwjguiWindow.render();
     }
 
-    public void cleanup(){
-
+    public void cleanup() {
         GLFW.glfwDestroyWindow(window);
     }
 
-    public void setClearColor(float r,float g,float b,float a){
-        GL46.glClearColor(r,g,b,a);
+    public void setClearColor(float r, float g, float b, float a) {
+        GL46.glClearColor(r, g, b, a);
     }
 
-    public boolean isKeyPressed(int keycode){
+    public boolean isKeyPressed(int keycode) {
         return GLFW.glfwGetKey(window, keycode) == GLFW.GLFW_PRESS;
     }
 
-    public boolean windowShouldClose(){
+    public boolean windowShouldClose() {
         return GLFW.glfwWindowShouldClose(window);
-    }
-
-    public void setResizeable(boolean resizeable) {
-        this.resizeable = resizeable;
     }
 
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        GLFW.glfwSetWindowTitle(window, title);
     }
 
     public int getWidth() {
@@ -111,6 +110,11 @@ public class WindowManager {
         return lwjguiWindow.getContext().getHeight();
     }
 
+    public void setWindow(Window window) {
+        this.window = window.getContext().getWindowHandle();
+        this.lwjguiWindow = window;
+    }
+
     public long getWindow() {
         return window;
     }
@@ -119,20 +123,29 @@ public class WindowManager {
         return resizeable;
     }
 
+    public void setResizeable(boolean resizeable) {
+        this.resizeable = resizeable;
+    }
+
     public Matrix4f getProjectionMatrix() {
         return projectionMatrix;
     }
-    public void setTitle(String title){
-        GLFW.glfwSetWindowTitle(window, title);
-    }
 
-    public Matrix4f updateProjectionMatrix(){
+    public Matrix4f updateProjectionMatrix() {
         float aspectRatio = (float) getWidth() / getHeight();
         return projectionMatrix.setPerspective(FOV, aspectRatio, Z_NEAR, Z_FAR);
     }
-    public Matrix4f updateProjectionMatrix(Matrix4f matrix){
+
+    public Matrix4f updateProjectionMatrix(Matrix4f matrix) {
         float aspectRatio = (float) getWidth() / getHeight();
         return matrix.setPerspective(FOV, aspectRatio, Z_NEAR, Z_FAR);
     }
 
+    public void show() {
+        lwjguiWindow.show();
+    }
+
+    public Window getLwjguiWindow() {
+        return lwjguiWindow;
+    }
 }

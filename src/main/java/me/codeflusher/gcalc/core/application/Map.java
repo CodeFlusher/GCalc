@@ -12,14 +12,12 @@ public class Map {
         this.actors = new HashMap<>();
     }
 
-    public void addActor(Identifier identifier, Model model){
+    public void addActor(Identifier identifier, Model model) {
         actors.put(identifier, model);
     }
 
-    public Model getActor(Identifier identifier){
+    public Model getActor(Identifier identifier) {
         return actors.get(identifier);
     }
-    public void setActor(Identifier identifier, Model model){
-        actors.put(identifier, model);
-    }
+
 }

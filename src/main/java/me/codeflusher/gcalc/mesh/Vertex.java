@@ -6,16 +6,6 @@ public class Vertex {
     public final float z;
     public final boolean existing;
 
-    @Override
-    public String toString() {
-        return "Vertex{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                ", existing=" + existing +
-                '}';
-    }
-
     public Vertex(float x, float y, float z, boolean existing) {
         this.x = x;
         this.y = y;
@@ -27,7 +17,17 @@ public class Vertex {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.existing =true;
+        this.existing = true;
+    }
+
+    @Override
+    public String toString() {
+        return "Vertex{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", existing=" + existing +
+                '}';
     }
 
     public float getX() {

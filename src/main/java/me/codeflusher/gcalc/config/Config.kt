@@ -1,6 +1,5 @@
 package me.codeflusher.gcalc.config
 
-import me.codeflusher.gcalc.config.ParamRange
 import java.io.Serializable
 
 data class Config(
@@ -12,5 +11,5 @@ data class Config(
     val rangeZ: ParamRange,
     val resolutionX: Int,
     val resolutionY: Int,
-    val debug: Boolean
-    ) : Serializable
+    val debug: Boolean,
+) : Serializable
