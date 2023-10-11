@@ -38,7 +38,7 @@ public class GAppWindowManager {
             throw new IllegalStateException("Failed to initialize the GLFW");
         }
 
-        window = LWJGUIUtil.createOpenGLCoreWindow(Constants.APP_NAME, 1,1, true, true);
+        window = LWJGUIUtil.createOpenGLCoreWindow(Constants.APP_NAME, 1, 1, true, true);
 
         LogSystem.log("Window instance", window);
         if (window == MemoryUtil.NULL) {
@@ -47,17 +47,16 @@ public class GAppWindowManager {
 
         this.lwjguiWindow = LWJGUI.initialize(window);
 
-        lwjguiWindow.setResizible(false);
+        lwjguiWindow.setResizible(true);
         var config = ConfigManager.getConfig();
 
         this.show();
 
-        lwjguiWindow.setScene(new Scene(GCalcCore.getApplicationInstance().createUI(), config.getResolutionX(),config.getResolutionY()));
-        LogSystem.log("Window", "Finalized to initialize the window");
+        lwjguiWindow.setScene(new Scene(GCalcCore.getApplicationInstance().createUI(), config.getResolutionX(), config.getResolutionY()));
+        LogSystem.log("Window", "Window manager finished starting the window");
     }
 
     public void update() {
-        Window lwjguiWindow = GCalcCore.getLwjguiWindow();
         int height = getHeight();
         int width = getWidth();
         Config config = ConfigManager.getConfig();
@@ -65,21 +64,18 @@ public class GAppWindowManager {
             LogSystem.debugLog("TestHeight", height + " " + config.getResolutionY());
             LogSystem.debugLog("TestHeight", width + " " + config.getResolutionX());
             try {
-                ConfigManager.writeConfig(new Config(config.getVSync(), config.getLatestPrompt(), config.getASliderState(), config.getRangeX(), config.getRangeY(), config.getRangeZ(), width, height, config.getDebug()));
+                ConfigManager.writeConfig(new Config(config.getVSync(), config.getLatestPrompt(), config.getASliderState(), config.getRangeA(), config.getRangeX(), config.getRangeY(), width, height, config.getStaticMeshResolution(), config.getDynamicMeshResolution(), config.getDebug()));
+                LogSystem.log("Config IO", "Successfully update the config");
                 ConfigManager.loadConfigFromDisk();
                 config = ConfigManager.getConfig();
                 lwjguiWindow.setScene(new Scene(GCalcCore.getApplicationInstance().createUI(), config.getResolutionX(), config.getResolutionY()));
             } catch (Exception e) {
                 LogSystem.log("Window", "Failed to update config.");
+                LogSystem.exception("Window", e);
             }
         }
 
         LWJGUI.render();
-//        lwjguiWindow.render();
-    }
-
-    public void cleanup() {
-        GLFW.glfwDestroyWindow(window);
     }
 
     public void setClearColor(float r, float g, float b, float a) {
@@ -94,10 +90,6 @@ public class GAppWindowManager {
         return GLFW.glfwWindowShouldClose(window);
     }
 
-    public String getTitle() {
-        return title;
-    }
-
     public void setTitle(String title) {
         GLFW.glfwSetWindowTitle(window, title);
     }
@@ -108,11 +100,6 @@ public class GAppWindowManager {
 
     public int getHeight() {
         return lwjguiWindow.getContext().getHeight();
-    }
-
-    public void setWindow(Window window) {
-        this.window = window.getContext().getWindowHandle();
-        this.lwjguiWindow = window;
     }
 
     public long getWindow() {

@@ -1,6 +1,5 @@
 package me.codeflusher.gcalc.core.application;
 
-import lwjgui.scene.Scene;
 import lwjgui.scene.layout.Pane;
 
 public interface IApplication {
@@ -9,6 +8,7 @@ public interface IApplication {
     void input();
 
     void update();
+
     void setMouseInput(MouseInput input);
 
     void render();

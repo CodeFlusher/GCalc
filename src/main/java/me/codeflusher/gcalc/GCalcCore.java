@@ -1,9 +1,5 @@
 package me.codeflusher.gcalc;
 
-import lwjgui.LWJGUIApplication;
-import lwjgui.Task;
-import lwjgui.scene.Scene;
-import lwjgui.scene.Window;
 import me.codeflusher.gcalc.config.ConfigManager;
 import me.codeflusher.gcalc.core.EngineManager;
 import me.codeflusher.gcalc.core.GAppWindowManager;
@@ -18,7 +14,6 @@ public class GCalcCore {
     private static GAppWindowManager windowManager;
     private static IApplication applicationInstance;
     private static EngineManager engine;
-    private static Window lwjguiWindow;
 
     public static void main(String[] args) {
         ConfigManager.firstLoadConfigFromDisk();
@@ -35,7 +30,7 @@ public class GCalcCore {
 
         try {
             engine.startEngine();
-        }catch (Exception e){
+        } catch (Exception e) {
             LogSystem.exception("Init", e);
         }
 
@@ -53,11 +48,4 @@ public class GCalcCore {
         return applicationInstance;
     }
 
-    public static void setLwjguiWindow(Window lwjguiWindow) {
-        GCalcCore.lwjguiWindow = lwjguiWindow;
-    }
-
-    public static Window getLwjguiWindow() {
-        return lwjguiWindow;
-    }
 }

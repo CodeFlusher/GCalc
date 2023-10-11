@@ -1,6 +1,5 @@
 package me.codeflusher.gcalc.core;
 
-import lwjgui.scene.Window;
 import me.codeflusher.gcalc.GCalcCore;
 import me.codeflusher.gcalc.core.application.IApplication;
 import me.codeflusher.gcalc.core.application.MouseInput;
@@ -12,18 +11,13 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 public class EngineManager {
     public static final long NANOSECOND = 1000000000;
     private static final float FRAMERATE = 1000;
-    private static int fps;
     private static final float frametime = 1 / FRAMERATE;
-    private boolean isRunning;
+    private static int fps;
     private GAppWindowManager windowManager;
     private MouseInput mouseInput;
     private GLFWErrorCallback errorCallback;
     private IApplication logic;
     private int frames = 0;
-
-    public static int getFps() {
-        return fps;
-    }
 
     public static void setFps(int fps) {
         EngineManager.fps = fps;
@@ -47,9 +41,6 @@ public class EngineManager {
 
     public void startEngine() {
         this.init();
-        if (isRunning) {
-            return;
-        }
         this.runWindow();
     }
 
@@ -74,8 +65,6 @@ public class EngineManager {
                 render = true;
                 unprocessedTime -= frametime;
 
-                //LogSystem.debugLog("Engine loop", ((Double)unprocessedTime).toString() + " " + frametime);
-
                 if (frameCounter >= NANOSECOND) {
                     setFps(frames);
                     windowManager.setTitle(Constants.APP_NAME + " | FPS: " + frames);
@@ -93,15 +82,9 @@ public class EngineManager {
         cleanup();
     }
 
-
-
     private void input() {
         mouseInput.input();
         logic.input();
-    }
-
-    public int getCurrentFrame() {
-        return frames;
     }
 
     private void render() {
@@ -117,9 +100,7 @@ public class EngineManager {
     private void cleanup() {
         logic.cleanup();
         LogSystem.log("Engine Loop", "Cleaning up after engine execution");
-//        window.cleanup();
         errorCallback.free();
-//        GLFW.glfwTerminate();
     }
 
 

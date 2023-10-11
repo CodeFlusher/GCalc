@@ -1,11 +1,9 @@
 package me.codeflusher.gcalc;
 
-import lwjgui.event.ActionEvent;
-import lwjgui.event.EventHandler;
-import lwjgui.event.MouseEvent;
 import lwjgui.geometry.Insets;
 import lwjgui.paint.Color;
 import lwjgui.scene.control.Button;
+import lwjgui.scene.control.Label;
 import lwjgui.scene.control.Slider;
 import lwjgui.scene.control.TextField;
 import lwjgui.scene.layout.HBox;
@@ -14,9 +12,10 @@ import lwjgui.scene.layout.Pane;
 import lwjgui.scene.layout.VBox;
 import me.codeflusher.gcalc.config.Config;
 import me.codeflusher.gcalc.config.ConfigManager;
+import me.codeflusher.gcalc.config.ParamRange;
 import me.codeflusher.gcalc.core.EngineManager;
-import me.codeflusher.gcalc.core.RenderManager;
 import me.codeflusher.gcalc.core.GAppWindowManager;
+import me.codeflusher.gcalc.core.RenderManager;
 import me.codeflusher.gcalc.core.application.AppScene;
 import me.codeflusher.gcalc.core.application.IApplication;
 import me.codeflusher.gcalc.core.application.Map;
@@ -26,7 +25,10 @@ import me.codeflusher.gcalc.mesh.Triangle;
 import me.codeflusher.gcalc.mesh.Vertex;
 import me.codeflusher.gcalc.mesh.VertexSolver;
 import me.codeflusher.gcalc.user.Camera;
-import me.codeflusher.gcalc.util.*;
+import me.codeflusher.gcalc.util.Constants;
+import me.codeflusher.gcalc.util.LogSystem;
+import me.codeflusher.gcalc.util.Tristate;
+import me.codeflusher.gcalc.util.Utils;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
@@ -41,21 +43,24 @@ public class GCalcActivity implements IApplication {
     private final ObjectLoader loader;
     private final AppScene scene;
     private final GAppWindowManager window;
+    private final float color = 0.0f;
+    private final Vector3f cameraInc;
     private Tristate isMovingGraph;
     private int updateCounter;
     private long totalTimeCounted;
-    private final float color = 0.0f;
-    private final Vector3f cameraInc;
     private MouseInput mouseInput;
     private boolean isInput;
+    private float aState;
 
     public GCalcActivity() {
         this.renderer = new RenderManager();
         this.window = GCalcCore.getWindowManager();
         this.loader = new ObjectLoader();
+        Config config = ConfigManager.getConfig();
+        aState = config.getASliderState();
         scene = new AppScene(new Map(), new Camera());
         isMovingGraph = Tristate.AWAIT;
-        //camera.setPosition(new Vector3f(20,20,20));
+        scene.getCamera().setPosition(new Vector3f(20, 20, 20));
         cameraInc = new Vector3f(0, 0, 0);
     }
 
@@ -70,11 +75,16 @@ public class GCalcActivity implements IApplication {
     }
 
     //(float) (10*Math.cos(x)+10*Math.sin(y))
-    public void updateModel(Integer resolutionX, Integer resolutionY, float scaleValue, float offset) {
+    public void updateModel() {
         // LogSystem.log("Mesh compute", "Starting mesh computation");
         long startTime = System.nanoTime();
-        ArrayList<Vertex> vertices = VertexSolver.getVertexMesh((x, y) -> (float) Math.pow(Math.abs(x), y), resolutionX, resolutionY, scaleValue, offset);
-        ArrayList<Triangle> triangles = Triangle.createTriangleMesh(vertices, resolutionX, resolutionY);
+        boolean isStatic = isMovingGraph != Tristate.RUN;
+        ArrayList<Vertex> vertices = VertexSolver.getVertexMesh((x, y) -> (float) (((float) Math.pow(Math.abs(x), y)) / (aState == 0 ? 0.1 : aState)), isStatic);
+        if (vertices.isEmpty()) {
+            LogSystem.exception("Mesh Compute", new RuntimeException("Failed to create vertex mesh"));
+            return;
+        }
+        ArrayList<Triangle> triangles = Triangle.createTriangleMesh(vertices, isStatic);
 
         ArrayList<Float> vertFloats = new ArrayList<>() {
             {
@@ -104,7 +114,7 @@ public class GCalcActivity implements IApplication {
         updateCounter++;
         if (updateCounter == 360) {
             totalTimeCounted /= updateCounter;
-            LogSystem.log("Mesh Compute", "Computed 360 meshed in average: " + totalTimeCounted + " nanoseconds or " + ((float) totalTimeCounted) / EngineManager.NANOSECOND + " seconds");
+            LogSystem.log("Mesh Compute", "Computed 360 meshed in average: " + totalTimeCounted + " nanoseconds or " + ((float) totalTimeCounted) / EngineManager.NANOSECOND + " seconds for each graph mesh.");
             totalTimeCounted = 0;
             updateCounter = 0;
         }
@@ -113,6 +123,8 @@ public class GCalcActivity implements IApplication {
     @Override
     public void input() {
         cameraInc.set(0, 0, 0);
+        if (!isInput)
+            return;
         if (window.isKeyPressed(GLFW.GLFW_KEY_W)) {
             cameraInc.z = -1;
         }
@@ -128,10 +140,10 @@ public class GCalcActivity implements IApplication {
         if (window.isKeyPressed(GLFW.GLFW_KEY_SPACE)) {
             cameraInc.y = 1;
         }
-        if (window.isKeyPressed(GLFW.GLFW_KEY_RIGHT_SHIFT)) {
-            isMovingGraph = isMovingGraph.getInversed();
-        }
         if (window.isKeyPressed(GLFW.GLFW_KEY_LEFT_SHIFT)) {
+            cameraInc.y = -1;
+        }
+        if (window.isKeyPressed(GLFW.GLFW_KEY_RIGHT_SHIFT)) {
             cameraInc.y = -1;
         }
     }
@@ -142,16 +154,16 @@ public class GCalcActivity implements IApplication {
 
     @Override
     public void update() {
-        Integer resolution = 100;
-        if (isMovingGraph == Tristate.RUN)
-            updateModel(resolution, resolution, 0.05f, (float) GCalcCore.getEngine().getCurrentFrame() / 15);
-        else if (isMovingGraph == Tristate.AWAIT) {
-            updateModel(resolution * 5, resolution * 5, 0.05f, 0);
+        if (isMovingGraph == Tristate.RUN) {
+            updateModel();
+        } else if (isMovingGraph == Tristate.AWAIT) {
+            updateModel();
             isMovingGraph = Tristate.STOP;
+
         }
 
         scene.getCamera().movePosition(cameraInc.x * CAMERA_MOVEMENT_SPEED, cameraInc.y * CAMERA_MOVEMENT_SPEED, cameraInc.z * CAMERA_MOVEMENT_SPEED);
-        if (isInput){
+        if (isInput) {
             Vector2f rotationVector = mouseInput.getDisplayVector();
             scene.getCamera().moveRotation(rotationVector.x * Constants.MOUSE_SENSITIVITY, rotationVector.y * Constants.MOUSE_SENSITIVITY, 0f);
         }
@@ -179,6 +191,7 @@ public class GCalcActivity implements IApplication {
 
     @Override
     public Pane createUI() {
+        Config config = ConfigManager.getConfig();
 
         VBox root = new VBox();
 
@@ -189,49 +202,115 @@ public class GCalcActivity implements IApplication {
             isInput = true;
         });
 
+        glPane.setPrefSize(config.getResolutionX(), Math.floor((float) config.getResolutionY() * (0.66)));
+
         glPane.setOnMouseReleased(event -> {
             isInput = false;
         });
 
-        Config config = ConfigManager.getConfig();
-
+        HBox row0 = new HBox();
         HBox row1 = new HBox();
         HBox row2 = new HBox();
         HBox row3 = new HBox();
 
-        EventHandler<ActionEvent> eventHandler = event -> {
+        int insetValue = (int) (config.getResolutionY() * 0.033);
+        Insets insets = new Insets(insetValue, 0, 0, 0);
 
-            this.isMovingGraph = this.isMovingGraph.getInversed();
-        };
+        TextField staticMeshResolutionField = new TextField();
+        Label staticMeshResolutionLabel = new Label("Static mesh resolution");
+        staticMeshResolutionLabel.setPrefSize(config.getResolutionX() * 0.25, config.getResolutionY() * 0.05);
+        staticMeshResolutionField.setPrefSize(config.getResolutionX() * 0.25, config.getResolutionY() * 0.05);
+        TextField dynamicMeshResolutionField = new TextField();
+        Label dynamicMeshResolutionLabel = new Label("Dynamic mesh resolution");
+        dynamicMeshResolutionLabel.setPrefSize(config.getResolutionX() * 0.25, config.getResolutionY() * 0.05);
+        dynamicMeshResolutionField.setPrefSize(config.getResolutionX() * 0.25, config.getResolutionY() * 0.05);
+
+        row0.getChildren().addAll(staticMeshResolutionLabel, staticMeshResolutionField, dynamicMeshResolutionLabel, dynamicMeshResolutionField);
+        row0.setPadding(insets);
 
         Button toggleDynamicGraph = new Button("Toggle dynamic graph");
-        toggleDynamicGraph.setPrefSize((int) (config.getResolutionX() * 0.05), (int) (config.getResolutionX() * 0.05));
-        toggleDynamicGraph.setOnAction(eventHandler);
-        toggleDynamicGraph.setText("Toggle Dynamic Graph");
+        toggleDynamicGraph.setPrefSize((int) (config.getResolutionX() * 0.33), (int) (config.getResolutionY() * 0.05));
 
+        Button updateGraph = new Button("Update graph");
+        updateGraph.setPrefSize((int) (config.getResolutionX() * 0.33), (int) (config.getResolutionY() * 0.05));
 
-        TextField functionTextField = new TextField();
-        functionTextField.setPrefSize((int) (config.getResolutionX() * 0.05), (int) (config.getResolutionX() * 0.05));
+        TextField xRangeField = new TextField();
+        Label xRangeLabel = new Label("Maximum X range");
+        xRangeField.setPrefSize(config.getResolutionX() * 0.15, config.getResolutionY() * 0.05);
+        xRangeLabel.setPrefSize(config.getResolutionX() * 0.15, config.getResolutionY() * 0.05);
 
-        Slider slider = new Slider();
-
-        int insetValue = 15;
-        Insets insets = new Insets(insetValue);
-
-        row1.getChildren().addAll(toggleDynamicGraph);
+        row1.getChildren().addAll(toggleDynamicGraph, updateGraph, xRangeLabel, xRangeField);
         row1.setPadding(insets);
 
-        row2.getChildren().addAll(functionTextField);
+        Label graphEquationLabel = new Label("Graph equation: f(x,y) = z; f(x,y) = ");
+        graphEquationLabel.setPrefSize((int) (config.getResolutionX() * 0.33), (int) (config.getResolutionY() * 0.05));
+
+        TextField graphEquation = new TextField();
+        graphEquation.setPrefSize((int) (config.getResolutionX() * 0.33), (int) (config.getResolutionY() * 0.05));
+
+        TextField yRangeField = new TextField();
+        Label yRangeLabel = new Label("Maximum Y range");
+        yRangeField.setPrefSize(config.getResolutionX() * 0.15, config.getResolutionY() * 0.05);
+        yRangeLabel.setPrefSize(config.getResolutionX() * 0.15, config.getResolutionY() * 0.05);
+
+        row2.getChildren().addAll(graphEquationLabel, graphEquation, yRangeLabel, yRangeField);
         row2.setPadding(insets);
 
-        row3.getChildren().addAll(slider);
+        Label aParamSliderLabel = new Label("Slider of 'a' param");
+        aParamSliderLabel.setPrefSize((int) (config.getResolutionX() * 0.33), (int) (config.getResolutionY() * 0.05));
 
-        glPane.setPrefSize(config.getResolutionX(), Math.floor((float) config.getResolutionY() * 0.75));
+        Slider aParamSlider = new Slider(-1 * config.getRangeA().getMax(), config.getRangeA().getMax(), config.getASliderState());
+        aParamSlider.setPrefSize((int) (config.getResolutionX() * 0.33), (int) (config.getResolutionY() * 0.05));
+
+        TextField aRangeField = new TextField();
+        Label aRangeLabel = new Label("Maximum 'a' param range");
+
+        aRangeField.setPrefSize(config.getResolutionX() * 0.15, config.getResolutionY() * 0.05);
+        aRangeLabel.setPrefSize(config.getResolutionX() * 0.15, config.getResolutionY() * 0.05);
+
+        row3.getChildren().addAll(aParamSliderLabel, aParamSlider, aRangeLabel, aRangeField);
+        row3.setPadding(insets);
 
         root.getChildren().add(glPane);
-        root.getChildren().addAll( row1, row2, row3);
+        root.getChildren().addAll(row0, row1, row2, row3);
 
         root.setMinSize(config.getResolutionX(), config.getResolutionY());
+        toggleDynamicGraph.setOnAction(event -> {
+            this.isMovingGraph = this.isMovingGraph.getInversed();
+            LogSystem.log("GCalc", "Toggle dynamic/static graph: " + isMovingGraph);
+        });
+        updateGraph.setOnAction(event -> {
+            Config newConfig = new Config(config.getVSync(),
+                    graphEquation.getText(),
+                    (int) (aParamSlider.getValue()),
+                    new ParamRange(Integer.parseInt(aRangeField.getText()), false),
+                    new ParamRange(Integer.parseInt(xRangeField.getText()), false),
+                    new ParamRange(Integer.parseInt(yRangeField.getText()), false),
+                    config.getResolutionX(),
+                    config.getResolutionY(),
+                    Integer.parseInt(staticMeshResolutionField.getText()),
+                    Integer.parseInt(dynamicMeshResolutionField.getText()),
+                    config.getDebug());
+            try {
+                ConfigManager.writeConfig(newConfig);
+            } catch (Exception e) {
+                LogSystem.exception("Config IO", e);
+            }
+            ConfigManager.loadConfigFromDisk();
+            updateModel();
+        });
+
+        aParamSlider.setOnValueChangedEvent(event -> {
+            aState = (float) aParamSlider.getValue();
+        });
+
+        xRangeField.setText(String.valueOf(config.getRangeX().getMax()));
+        yRangeField.setText(String.valueOf(config.getRangeY().getMax()));
+        aRangeField.setText(String.valueOf(config.getRangeA().getMax()));
+        staticMeshResolutionField.setText(String.valueOf(config.getStaticMeshResolution()));
+        dynamicMeshResolutionField.setText(String.valueOf(config.getDynamicMeshResolution()));
+
+        graphEquation.setText(config.getLatestPrompt());
 
         return root;
     }

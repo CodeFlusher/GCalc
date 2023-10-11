@@ -1,5 +1,8 @@
 package me.codeflusher.gcalc.mesh;
 
+import me.codeflusher.gcalc.config.Config;
+import me.codeflusher.gcalc.config.ConfigManager;
+
 import java.util.ArrayList;
 
 public class Triangle {
@@ -13,12 +16,13 @@ public class Triangle {
         this.vert3ID = vert3ID;
     }
 
-    public static ArrayList<Triangle> createTriangleMesh(ArrayList<Vertex> vertices, Integer resolutionX, Integer resolutionY) {
-        //LogSystem.debugLog("Mesh compute", "Computing triangle mesh");
+    public static ArrayList<Triangle> createTriangleMesh(ArrayList<Vertex> vertices, boolean isStatic) {
         ArrayList<Triangle> triangles = new ArrayList<>();
-        for (int x = 0; x < resolutionX - 1; x++) {
-            for (int y = 0; y < resolutionY - 1; y++) {
-                int[] ids = {resolutionY * x + y, resolutionY * (x + 1) + y, resolutionY * x + (y + 1), resolutionY * (x + 1) + (y + 1)};
+        Config config = ConfigManager.getConfig();
+        Integer resolution = isStatic ? config.getStaticMeshResolution() : config.getDynamicMeshResolution();
+        for (int x = 0; x < resolution - 1; x++) {
+            for (int y = 0; y < resolution - 1; y++) {
+                int[] ids = {resolution * x + y, resolution * (x + 1) + y, resolution * x + (y + 1), resolution * (x + 1) + (y + 1)};
                 Vertex vert1 = vertices.get(ids[0]);
                 Vertex vert2 = vertices.get(ids[1]);
                 Vertex vert3 = vertices.get(ids[1]);

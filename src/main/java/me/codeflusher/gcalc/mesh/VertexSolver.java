@@ -1,6 +1,5 @@
 package me.codeflusher.gcalc.mesh;
 
-import me.codeflusher.gcalc.util.Constants;
 import me.codeflusher.gcalc.util.LogSystem;
 
 import java.util.ArrayList;
@@ -12,51 +11,52 @@ public class VertexSolver {
 
     private static ArrayList<VertexRow> vertexArrayList;
 
-    public static Vertex createVertex(VertexPredictionRunnable predicate, Integer x, Integer y, float scaleModifier, Integer resolutionX, Integer resolutionY, float offset) throws Exception {
-        return new Vertex(
-                x * ((float) Constants.MODEL_SIZE / resolutionX),
-                y * ((float) Constants.MODEL_SIZE / resolutionY),
-                predicate.run((x + offset) * scaleModifier * ((float) Constants.RESOLUTION_REFERENCE * ((float) resolutionX / resolutionY) / resolutionX),
-                        (y + offset) * scaleModifier * ((float) Constants.RESOLUTION_REFERENCE * ((float) resolutionY / resolutionX) / resolutionY)));
+    public static Vertex createVertex(VertexPredictionRunnable predicate, Integer x, Integer y, VertexAttributeCompute attributeCompute) throws Exception {
+        return new Vertex(attributeCompute.getVertexPosition(x), attributeCompute.getVertexPosition(y), predicate.run(attributeCompute.modifyX(x), attributeCompute.modifyY(y)));
     }
 
-    public static Vertex[] createTriangle(VertexPredictionRunnable predicate, Integer x, Integer y, float scaleModifier, Boolean isOdd, Integer resolutionX, Integer resolutionY, float offset) {
+    public static Vertex[] createTriangle(VertexPredictionRunnable predicate, Integer x, Integer y, VertexAttributeCompute attributeCompute, Boolean isOdd) {
         Vertex[] vertices = new Vertex[3];
         int odd = isOdd ? 1 : 0;
         for (int i = 0; i < 3; i++) {
             try {
-                vertices[i] = createVertex(predicate, x + (i + odd) % 2, y + (i + odd) / 2, scaleModifier, resolutionX, resolutionY, offset);
+                vertices[i] = createVertex(predicate, x + (i + odd) % 2, y + (i + odd) / 2, attributeCompute);
             } catch (Exception e) {
-                vertices[i] = new Vertex(x + i % 2, (y + (float) (i + odd) / 2), 0, false);
+                vertices[i] = new Vertex(attributeCompute.getVertexPosition(x), attributeCompute.getVertexPosition(y), 0, false);
             }
         }
         return vertices;
     }
 
-    public static VertexRow createRow(VertexPredictionRunnable predicate, Integer xPos, Integer resolutionX, Integer resolutionY, float scaleModifier, float offset) {
+    public static VertexRow createRow(VertexPredictionRunnable predicate, Integer xPos, VertexAttributeCompute attributeCompute) {
         ArrayList<Vertex> vertices = new ArrayList<>();
-        for (int y = -1 * (resolutionY / 2); y < (resolutionY / 2) - 1; y++) {
-            Vertex[] vertices1 = createTriangle(predicate, xPos, y, scaleModifier, false, resolutionX, resolutionY, offset);
-            Vertex[] vertices2 = createTriangle(predicate, xPos, y, scaleModifier, true, resolutionX, resolutionY, offset);
+        for (int y = 0; y < attributeCompute.getResolution(); y++) {
+            Vertex[] vertices1 = createTriangle(predicate, xPos, y, attributeCompute, false);
+            Vertex[] vertices2 = createTriangle(predicate, xPos, y, attributeCompute, true);
             vertices.addAll(List.of(vertices1));
             vertices.addAll(List.of(vertices2));
         }
-        return new VertexRow(vertices, xPos + (resolutionX / 2));
+        return new VertexRow(vertices, xPos);
     }
 
-    public static ArrayList<Vertex> getVertexMesh(VertexPredictionRunnable predicate, Integer resolutionX, Integer resolutionY, float scaleModifier, float offset) {
+    public static ArrayList<Vertex> getVertexMesh(VertexPredictionRunnable predicate, boolean isStatic) {
 
         ArrayList<Future<?>> futures = new ArrayList<>();
-        try (var executor = Executors.newFixedThreadPool(resolutionX)) {
-            vertexArrayList = new ArrayList<>(resolutionX - 1);
-            for (int x = -1 * (resolutionX / 2); x < (resolutionX / 2); x++) {
+        VertexAttributeCompute attributeCompute = new VertexAttributeCompute(isStatic);
+        int resolution = attributeCompute.getResolution();
+        //LogSystem.debugLog("Mesh Compute", attributeCompute);
+        vertexArrayList = new ArrayList<>();
+        vertexArrayList.ensureCapacity(resolution);
+        try (var executor = Executors.newFixedThreadPool(resolution)) {
+            for (int x = 0; x < resolution; x++) {
                 int finalX = x;
-                futures.add(executor.submit(() -> createRow(predicate, finalX, resolutionX, resolutionY, scaleModifier, offset)));
+                futures.add(executor.submit(() -> createRow(predicate, finalX, attributeCompute)));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            LogSystem.exception("Mesh Compute", e);
         }
         boolean isDone = false;
+        // LogSystem.debugLog("Mesh Compute", futures.size());
         while (!isDone) {
             isDone = futures.stream().allMatch(Future::isDone);
         }
@@ -65,7 +65,7 @@ public class VertexSolver {
                 VertexRow row = (VertexRow) future.get();
                 vertexArrayList.add(row.id, row);
             } catch (Exception e) {
-                LogSystem.log("Error", e);
+                LogSystem.exception("Mesh Compute", e);
             }
         });
 

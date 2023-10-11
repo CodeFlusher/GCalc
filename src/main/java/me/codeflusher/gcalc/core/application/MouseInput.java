@@ -1,8 +1,6 @@
 package me.codeflusher.gcalc.core.application;
 
 import me.codeflusher.gcalc.GCalcCore;
-import me.codeflusher.gcalc.core.GAppWindowManager;
-import me.codeflusher.gcalc.util.LogSystem;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
@@ -11,9 +9,6 @@ public class MouseInput {
     private final Vector2f currentPos;
     private final Vector2f displayVector;
 
-    private boolean inWindow = false;
-    private boolean leftButtonPressed = false;
-    private boolean rightButtonPressed = false;
 
     public MouseInput() {
         this.previousPos = new Vector2f(-1, -1);
@@ -27,19 +22,6 @@ public class MouseInput {
             currentPos.x = (float) xpos;
             currentPos.y = (float) ypos;
         });
-//
-//        GLFW.glfwSetCursorEnterCallback(windowHandle, (window, entered) -> {
-//            inWindow = entered;
-//        });
-//        GLFW.glfwSetMouseButtonCallback(windowHandle, (window, button, action, mods) -> {
-//            leftButtonPressed = button == GLFW.GLFW_MOUSE_BUTTON_1 && action == GLFW.GLFW_PRESS;
-//            rightButtonPressed = button == GLFW.GLFW_MOUSE_BUTTON_2 && action == GLFW.GLFW_PRESS;
-//        });
-    }
-
-    public void update(float xpos, float ypos){
-        currentPos.x = xpos;
-        currentPos.y = ypos;
     }
 
     public void input() {
@@ -59,36 +41,12 @@ public class MouseInput {
             }
 
         }
-//        LogSystem.debugLog("Mouse Input", this);
         previousPos.x = currentPos.x;
         previousPos.y = currentPos.y;
-//        currentPos.x = 0;
-//        currentPos.y = 0;
-    }
-
-    public boolean isLeftButtonPressed() {
-        return leftButtonPressed;
-    }
-
-    public boolean isRightButtonPressed() {
-        return rightButtonPressed;
-    }
-
-    public Vector2f getPreviousPos() {
-        return previousPos;
-    }
-
-    public Vector2f getCurrentPos() {
-        return currentPos;
     }
 
     public Vector2f getDisplayVector() {
-        //LogSystem.debugLog("Get display vector", displayVector);
         return displayVector;
-    }
-
-    public boolean isInWindow() {
-        return inWindow;
     }
 
     @Override
@@ -97,9 +55,6 @@ public class MouseInput {
                 "previousPos=" + previousPos +
                 ", currentPos=" + currentPos +
                 ", displayVector=" + displayVector +
-                ", inWindow=" + inWindow +
-                ", leftButtonPressed=" + leftButtonPressed +
-                ", rightButtonPressed=" + rightButtonPressed +
                 '}';
     }
 }

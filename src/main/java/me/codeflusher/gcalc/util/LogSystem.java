@@ -5,8 +5,10 @@ import java.time.Instant;
 
 public class LogSystem {
     private static LogRunnable debugRunnable;
+    private static LogRunnable errorRunnable;
     private static LogRunnable logRunnable;
     private static LogSystem instance;
+
     private LogSystem() {
 
     }
@@ -15,7 +17,14 @@ public class LogSystem {
         if (instance != null) {
             return;
         }
-        logRunnable = (namespace, message) -> Logger.info("[" + Timestamp.from(Instant.ofEpochMilli(System.currentTimeMillis())) + " | " + namespace + "]: " + message.toString());
+        logRunnable = (namespace, message) -> {
+            if (message != null)
+                Logger.info("[" + Timestamp.from(Instant.ofEpochMilli(System.currentTimeMillis())) + " | " + namespace + "]: " + message);
+        };
+        errorRunnable = (namespace, message) -> {
+            if (message != null)
+                Logger.error("[" + Timestamp.from(Instant.ofEpochMilli(System.currentTimeMillis())) + " | " + namespace + "]: " + message);
+        };
         if (debugAllowed) {
             debugRunnable = logRunnable;
         } else {
@@ -29,10 +38,11 @@ public class LogSystem {
     public static void log(String namespace, Object object) {
         logRunnable.run("INFO | " + namespace, object);
     }
+
     public static void exception(String namespace, Exception object) {
         StackTraceElement[] elements = object.getStackTrace();
         errLog(namespace, object.getMessage());
-        for(StackTraceElement element : elements){
+        for (StackTraceElement element : elements) {
             errLog(namespace, element);
         }
     }
@@ -40,9 +50,11 @@ public class LogSystem {
     public static void debugLog(String namespace, Object object) {
         debugRunnable.run("DEBUG | " + namespace, object);
     }
+
     public static void errLog(String namespace, Object object) {
         debugRunnable.run("ERROR | " + namespace, object);
     }
+
     public static void warnLog(String namespace, Object object) {
         debugRunnable.run("WARN | " + namespace, object);
     }
@@ -54,6 +66,10 @@ public class LogSystem {
     private static class Logger {
         public static void info(Object o) {
             System.out.println(o);
+        }
+
+        public static void error(Object o) {
+            System.err.println(o);
         }
     }
 
