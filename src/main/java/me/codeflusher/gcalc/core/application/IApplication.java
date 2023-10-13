@@ -11,6 +11,8 @@ public interface IApplication {
 
     void setMouseInput(MouseInput input);
 
+    void setFramerate(Integer framerate);
+
     void render();
 
     void cleanup();

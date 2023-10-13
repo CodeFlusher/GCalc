@@ -3,13 +3,21 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.20-Beta2'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'me.codeflusher.gcalc.GCalcCore'
+        )
+    }
+}
 project.ext.lwjglVersion = "3.2.3"
 project.ext.lwjglNatives = "natives-windows"
 project.ext.jomlVersion = "1.10.0"
 project.ext.jomlPrimVersion = "1.10.0"
 
+
 group = 'me.codeflusher'
-version = '1.0-SNAPSHOT'
+version = '1.0'
 
 repositories {
     mavenCentral()
@@ -28,6 +36,8 @@ dependencies {
     implementation "org.joml:joml-primitives:${jomlPrimVersion}"
 
     implementation 'com.github.orange451:LWJGUI:pre-mt'
+
+    implementation "net.objecthunter:exp4j:0.4.8"
 
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-assimp"

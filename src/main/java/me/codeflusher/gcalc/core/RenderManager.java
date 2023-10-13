@@ -28,7 +28,6 @@ public class RenderManager implements IGRender {
         shader.creteUniform("projectionMatrix");
         shader.creteUniform("viewMatrix");
 
-        GL46.glDisable(GL46.GL_CULL_FACE);
 
         this.application = GCalcCore.getApplicationInstance();
     }
@@ -48,14 +47,21 @@ public class RenderManager implements IGRender {
     @Override
     public void render(Context context) {
         clear();
-        shader.bind();
+        //shader.bind();
 
         AppScene scene = application.getScene();
         Model model = scene.getMap().getActor(Constants.MODEL_IDENTIFIER);
 
+        shader.bind();
         shader.setUniform("projectionMatrix", window.updateProjectionMatrix());
         shader.setUniform("viewMatrix", Transformation.getViewMatrix(scene.getCamera()));
         drawAxes();
+
+        GL46.glDisable(GL46.GL_CULL_FACE);
+        GL46.glDisable(GL46.GL_SCISSOR_TEST);
+        GL46.glDisable(GL46.GL_STENCIL_TEST);
+        GL46.glDisable(GL46.GL_DEPTH_TEST);
+        GL46.glDisable(GL46.GL_FRAMEBUFFER);
 
         GL46.glBindVertexArray(model.getId());
         GL46.glEnableVertexAttribArray(0);

@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="GCalc:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e8485051-b267-49fb-8992-63e323d800ee" name="Changes" comment="Structure rework and preparing for ui development">
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/config/Config.kt" afterDir="false" />
+    <list default="true" id="e8485051-b267-49fb-8992-63e323d800ee" name="Changes" comment="Finished the UI. Now every button and slider is working properly.&#10;Config now contains last state of ui after update graph button.&#10;Optimized the mesh creation to make it more readable. VertexAttributeCompute class as a tool for it.&#10;Now ParamRange have only maximum value">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/GCalc_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/GCalcActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/GCalcActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/GCalcCore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/GCalcCore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/AppScene.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/AppScene.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/EngineManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/EngineManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/IApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/IApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/Map.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/Map.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/MouseInput.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/MouseInput.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/RenderManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/RenderManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/WindowManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/WindowManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Config.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/ConfigManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/config/ConfigManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/IApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/core/application/IApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/mesh/VertexSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/mesh/VertexSolver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Constants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/LogSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/LogSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/mesh/Triangle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/Vertex.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/mesh/Vertex.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/util/VertexSolver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/codeflusher/gcalc/mesh/VertexSolver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shader/fragment.fsh" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shader/fragment.fsh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/shader/vertex.vsh" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/shader/vertex.vsh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,10 +53,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Kotlin Data Class" />
+        <option value="Class" />
         <option value="Enum" />
         <option value="Interface" />
-        <option value="Class" />
-        <option value="Kotlin Data Class" />
       </list>
     </option>
   </component>
@@ -80,6 +80,9 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.orange451/LWJGUI/pre-mt/5646b96eb636afb98c6a63a11a6f3f79e95b41ec/LWJGUI-pre-mt-sources.jar!/lwjgui/scene/Node.java" root0="SKIP_INSPECTION" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -89,27 +92,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.preview.features.used&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
-    &quot;jdk.selected.com.intellij.ui.dsl.builder.impl.RowImpl.sdk&quot;: &quot;17&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.19310345&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.preview.features.used": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "jdk.selected.JAVA_MODULE": "17",
+    "jdk.selected.com.intellij.ui.dsl.builder.impl.RowImpl.sdk": "17",
+    "last_opened_file_path": "D:/Egor/dev/j/GCalc/src/main/resources",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.19310345",
+    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;jdk.preference.com.intellij.ui.dsl.builder.impl.RowImpl.sdk&quot;: [
-      &quot;20=C:/Users/egors/.jdks/openjdk-20.0.1&quot;
+  "keyToStringList": {
+    "jdk.preference.com.intellij.ui.dsl.builder.impl.RowImpl.sdk": [
+      "20=C:/Users/egors/.jdks/openjdk-20.0.1"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Egor\dev\j\GCalc\src\main\resources" />
+    </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="me.codeflusher.gcalc.core.application" />
       <recent name="me.codeflusher.gcalc.config" />
@@ -147,13 +155,109 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
+    <configuration name="GCalc [compileJava]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="compileJava" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="GCalc [compileKotlin]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="compileKotlin" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="GCalc [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="GCalc [javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="javadoc" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.GCalcCore" />
+      <item itemvalue="Gradle.GCalc [compileJava]" />
+      <item itemvalue="Gradle.GCalc [compileKotlin]" />
+      <item itemvalue="Gradle.GCalc [javadoc]" />
+      <item itemvalue="Gradle.GCalc [jar]" />
       <item itemvalue="Gradle.GCalc [build]" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.GCalc [build]" />
+        <item itemvalue="Gradle.GCalc [jar]" />
+        <item itemvalue="Gradle.GCalc [compileKotlin]" />
+        <item itemvalue="Gradle.GCalc [compileJava]" />
+        <item itemvalue="Gradle.GCalc [javadoc]" />
       </list>
     </recent_temporary>
   </component>
@@ -182,7 +286,31 @@
       <option name="project" value="LOCAL" />
       <updated>1696427453637</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Small changes in shaders&#10;Working on Config&#10;Fixed window resize&#10;Now gui scales to fit the window&#10;Small tweaks">
+      <option name="closed" value="true" />
+      <created>1696504103390</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1696504103390</updated>
+    </task>
+    <task id="LOCAL-00004" summary="UI Started to work">
+      <option name="closed" value="true" />
+      <created>1696955424371</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1696955424371</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Finished the UI. Now every button and slider is working properly.&#10;Config now contains last state of ui after update graph button.&#10;Optimized the mesh creation to make it more readable. VertexAttributeCompute class as a tool for it.&#10;Now ParamRange have only maximum value">
+      <option name="closed" value="true" />
+      <created>1697029219550</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1697029219550</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -216,7 +344,10 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Updated some code and fixing some problems. Preparing for new functionality." />
     <MESSAGE value="Structure rework and preparing for ui development" />
-    <option name="LAST_COMMIT_MESSAGE" value="Structure rework and preparing for ui development" />
+    <MESSAGE value="Small changes in shaders&#10;Working on Config&#10;Fixed window resize&#10;Now gui scales to fit the window&#10;Small tweaks" />
+    <MESSAGE value="UI Started to work" />
+    <MESSAGE value="Finished the UI. Now every button and slider is working properly.&#10;Config now contains last state of ui after update graph button.&#10;Optimized the mesh creation to make it more readable. VertexAttributeCompute class as a tool for it.&#10;Now ParamRange have only maximum value" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished the UI. Now every button and slider is working properly.&#10;Config now contains last state of ui after update graph button.&#10;Optimized the mesh creation to make it more readable. VertexAttributeCompute class as a tool for it.&#10;Now ParamRange have only maximum value" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

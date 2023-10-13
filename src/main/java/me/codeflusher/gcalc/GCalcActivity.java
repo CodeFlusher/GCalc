@@ -1,6 +1,8 @@
 package me.codeflusher.gcalc;
 
+import lwjgui.font.FontStyle;
 import lwjgui.geometry.Insets;
+import lwjgui.geometry.Pos;
 import lwjgui.paint.Color;
 import lwjgui.scene.control.Button;
 import lwjgui.scene.control.Label;
@@ -29,6 +31,7 @@ import me.codeflusher.gcalc.util.Constants;
 import me.codeflusher.gcalc.util.LogSystem;
 import me.codeflusher.gcalc.util.Tristate;
 import me.codeflusher.gcalc.util.Utils;
+import net.objecthunter.exp4j.ExpressionBuilder;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
@@ -51,6 +54,11 @@ public class GCalcActivity implements IApplication {
     private MouseInput mouseInput;
     private boolean isInput;
     private float aState;
+    private ExpressionBuilder expressionBuilder;
+    private Label averageDynamicMeshProcessionTime;
+    private Label staticMeshProcessionTime;
+    private Label frameRate;
+    private Label isExpressionFailedToBuild;
 
     public GCalcActivity() {
         this.renderer = new RenderManager();
@@ -60,8 +68,9 @@ public class GCalcActivity implements IApplication {
         aState = config.getASliderState();
         scene = new AppScene(new Map(), new Camera());
         isMovingGraph = Tristate.AWAIT;
-        scene.getCamera().setPosition(new Vector3f(20, 20, 20));
+        scene.getCamera().setPosition(new Vector3f(5, 5, 5));
         cameraInc = new Vector3f(0, 0, 0);
+        this.expressionBuilder = new ExpressionBuilder(config.getLatestPrompt()).variables("x", "y", "a");
     }
 
     @Override
@@ -79,7 +88,8 @@ public class GCalcActivity implements IApplication {
         // LogSystem.log("Mesh compute", "Starting mesh computation");
         long startTime = System.nanoTime();
         boolean isStatic = isMovingGraph != Tristate.RUN;
-        ArrayList<Vertex> vertices = VertexSolver.getVertexMesh((x, y) -> (float) (((float) Math.pow(Math.abs(x), y)) / (aState == 0 ? 0.1 : aState)), isStatic);
+
+        ArrayList<Vertex> vertices = VertexSolver.getVertexMesh(expressionBuilder, isStatic, aState);
         if (vertices.isEmpty()) {
             LogSystem.exception("Mesh Compute", new RuntimeException("Failed to create vertex mesh"));
             return;
@@ -109,12 +119,16 @@ public class GCalcActivity implements IApplication {
         loader.cleanup();
         scene.getMap().addActor(Constants.MODEL_IDENTIFIER, loader.loadModel(Utils.toFloatArray(vertFloats), Utils.toIntArray(tris)));
         long endTime = System.nanoTime() - startTime;
-        //LogSystem.log("Mesh Compute", "Computed mesh in: " + endTime);
-        totalTimeCounted += endTime;
-        updateCounter++;
+        if (isStatic) {
+            this.setStaticMeshProcessionTime(endTime);
+        } else {
+            totalTimeCounted += endTime;
+            updateCounter++;
+        }
         if (updateCounter == 360) {
             totalTimeCounted /= updateCounter;
             LogSystem.log("Mesh Compute", "Computed 360 meshed in average: " + totalTimeCounted + " nanoseconds or " + ((float) totalTimeCounted) / EngineManager.NANOSECOND + " seconds for each graph mesh.");
+            this.setAverageDynamicMeshProcessionTime(totalTimeCounted);
             totalTimeCounted = 0;
             updateCounter = 0;
         }
@@ -198,15 +212,11 @@ public class GCalcActivity implements IApplication {
         OpenGLPane glPane = new OpenGLPane();
         glPane.setBackgroundLegacy(new Color(0, 0, 0, 0));
         glPane.setRendererCallback(renderer);
-        glPane.setOnMousePressed(event -> {
-            isInput = true;
-        });
+        glPane.setOnMousePressed(event -> isInput = true);
 
         glPane.setPrefSize(config.getResolutionX(), Math.floor((float) config.getResolutionY() * (0.66)));
 
-        glPane.setOnMouseReleased(event -> {
-            isInput = false;
-        });
+        glPane.setOnMouseReleased(event -> isInput = false);
 
         HBox row0 = new HBox();
         HBox row1 = new HBox();
@@ -215,6 +225,24 @@ public class GCalcActivity implements IApplication {
 
         int insetValue = (int) (config.getResolutionY() * 0.033);
         Insets insets = new Insets(insetValue, 0, 0, 0);
+
+        this.staticMeshProcessionTime = new Label("Static mesh procession time is undefined");
+        this.averageDynamicMeshProcessionTime = new Label("Average dynamic mesh procession time is undefined");
+        this.frameRate = new Label("Framerate undefined");
+        this.isExpressionFailedToBuild = new Label();
+
+        staticMeshProcessionTime.setFontSize(28);
+        averageDynamicMeshProcessionTime.setFontSize(28);
+        frameRate.setFontSize(28);
+        isExpressionFailedToBuild.setFontSize(32);
+        isExpressionFailedToBuild.setTextFill(Color.RED);
+        isExpressionFailedToBuild.setFontStyle(FontStyle.BOLD);
+
+        glPane.setAlignment(Pos.TOP_LEFT);
+        glPane.setPadding(new Insets(16));
+        var glPaneRow = new VBox();
+        glPaneRow.getChildren().addAll(frameRate, staticMeshProcessionTime, averageDynamicMeshProcessionTime, isExpressionFailedToBuild);
+        glPane.getChildren().add(glPaneRow);
 
         TextField staticMeshResolutionField = new TextField();
         Label staticMeshResolutionLabel = new Label("Static mesh resolution");
@@ -280,6 +308,14 @@ public class GCalcActivity implements IApplication {
             LogSystem.log("GCalc", "Toggle dynamic/static graph: " + isMovingGraph);
         });
         updateGraph.setOnAction(event -> {
+            expressionBuilder = new ExpressionBuilder(graphEquation.getText()).variables("x", "y", "a");
+            try {
+                expressionBuilder.build();
+                this.isExpressionFailedToBuild.setText("");
+            } catch (Exception e) {
+                this.isExpressionFailedToBuild.setText("Failed to parse expression.");
+                LogSystem.exception("Expression Build", e);
+            }
             Config newConfig = new Config(config.getVSync(),
                     graphEquation.getText(),
                     (int) (aParamSlider.getValue()),
@@ -313,5 +349,17 @@ public class GCalcActivity implements IApplication {
         graphEquation.setText(config.getLatestPrompt());
 
         return root;
+    }
+
+    public void setFramerate(Integer frames) {
+        frameRate.setText("FPS: " + frames);
+    }
+
+    public void setAverageDynamicMeshProcessionTime(Long time) {
+        this.averageDynamicMeshProcessionTime.setText("Average dynamic mesh processing time: " + ((double) time) / EngineManager.NANOSECOND + " seconds.");
+    }
+
+    public void setStaticMeshProcessionTime(Long time) {
+        this.staticMeshProcessionTime.setText("Static mesh processing time: " + ((double) time) / EngineManager.NANOSECOND + " seconds.");
     }
 }

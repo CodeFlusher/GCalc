@@ -3,7 +3,6 @@ package me.codeflusher.gcalc.core;
 import me.codeflusher.gcalc.GCalcCore;
 import me.codeflusher.gcalc.core.application.IApplication;
 import me.codeflusher.gcalc.core.application.MouseInput;
-import me.codeflusher.gcalc.util.Constants;
 import me.codeflusher.gcalc.util.LogSystem;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -67,7 +66,8 @@ public class EngineManager {
 
                 if (frameCounter >= NANOSECOND) {
                     setFps(frames);
-                    windowManager.setTitle(Constants.APP_NAME + " | FPS: " + frames);
+                    //windowManager.setTitle(Constants.APP_NAME + " | FPS: " + frames);
+                    logic.setFramerate(frames);
 
                     frames = 0;
                     frameCounter = 0;
