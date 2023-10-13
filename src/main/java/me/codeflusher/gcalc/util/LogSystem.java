@@ -20,7 +20,7 @@ public class LogSystem {
         logRunnable = (namespace, message) -> {
             if (message != null) {
                 StringBuilder builder = new StringBuilder();
-                for (var obj : message) {
+                for (Object obj : message) {
                     builder.append(obj);
                     builder.append(" ");
                 }
@@ -30,7 +30,7 @@ public class LogSystem {
         errorRunnable = (namespace, message) -> {
             if (message != null) {
                 StringBuilder builder = new StringBuilder();
-                for (var obj : message) {
+                for (Object obj : message) {
                     builder.append(obj);
                     builder.append(" ");
                 }

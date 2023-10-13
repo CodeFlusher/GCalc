@@ -2,11 +2,13 @@ package me.codeflusher.gcalc.config;
 
 import com.google.gson.Gson;
 import me.codeflusher.gcalc.util.LogSystem;
+import org.lwjgl.system.CallbackI;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 public class ConfigManager {
@@ -14,7 +16,7 @@ public class ConfigManager {
     private static Config config;
 
     private static void defaultConfig() {
-        config = new Config(true, "sin(x+y)", 0, new ParamRange(100, false), new ParamRange(5, false), new ParamRange(5, false), 800, 600, 500, 50, true);
+        config = new Config(true, "sin(x+y)*a", 2, new ParamRange(5, false), new ParamRange(5, false), new ParamRange(5, false), 800, 600, 512, 64, false);
     }
 
     public static void loadConfigFromDisk() {
@@ -32,15 +34,15 @@ public class ConfigManager {
         }
 
         Gson gson = new Gson();
-        String jsonConfigString;
+        StringBuilder jsonConfigString = new StringBuilder();
         try {
-            jsonConfigString = Files.readString(Path.of(CONFIG_PATH));
+            Files.readAllLines(Paths.get(CONFIG_PATH)).forEach(jsonConfigString::append);
         } catch (Exception e) {
             LogSystem.log("Config IO", "Failed to read the config!" + "\n" + Arrays.toString(e.getStackTrace()));
             defaultConfig();
             return;
         }
-        config = gson.fromJson(jsonConfigString, Config.class);
+        config = gson.fromJson(jsonConfigString.toString(), Config.class);
         if (config == null) {
             defaultConfig();
             try {
@@ -65,14 +67,14 @@ public class ConfigManager {
         }
 
         Gson gson = new Gson();
-        String jsonConfigString;
+        StringBuilder jsonConfigString = new StringBuilder();
         try {
-            jsonConfigString = Files.readString(Path.of(CONFIG_PATH));
+            Files.readAllLines(Paths.get(CONFIG_PATH)).forEach(jsonConfigString::append);
         } catch (Exception e) {
             defaultConfig();
             return;
         }
-        config = gson.fromJson(jsonConfigString, Config.class);
+        config = gson.fromJson(jsonConfigString.toString(), Config.class);
         if (config == null) {
             defaultConfig();
             try {

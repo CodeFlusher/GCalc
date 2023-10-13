@@ -5,6 +5,7 @@ import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class VertexSolver {
@@ -14,7 +15,7 @@ public class VertexSolver {
     private static Float a;
 
     public static Vertex createVertex(Expression predicate, Integer x, Integer y, VertexAttributeCompute attributeCompute) throws Exception {
-        var eq = predicate.setVariable("y", attributeCompute.modifyY(y)).setVariable("x", attributeCompute.modifyX(x)).setVariable("a", a).evaluate();
+        double eq = predicate.setVariable("y", attributeCompute.modifyY(y)).setVariable("x", attributeCompute.modifyX(x)).setVariable("a", a).evaluate();
         return new Vertex(attributeCompute.getVertexPosition(x), attributeCompute.getVertexPosition(y), (float) eq);
     }
 
@@ -36,8 +37,8 @@ public class VertexSolver {
         for (int y = 0; y < attributeCompute.getResolution(); y++) {
             Vertex[] vertices1 = createTriangle(predicate, xPos, y, attributeCompute, false);
             Vertex[] vertices2 = createTriangle(predicate, xPos, y, attributeCompute, true);
-            vertices.addAll(List.of(vertices1));
-            vertices.addAll(List.of(vertices2));
+            vertices.addAll(Arrays.asList(vertices1));
+            vertices.addAll(Arrays.asList(vertices2));
         }
         return new VertexRow(vertices, xPos);
     }
@@ -73,12 +74,27 @@ public class VertexSolver {
 //            }
 //        });
         ArrayList<Vertex> vertices = new ArrayList<>();
-        vertexArrayList.forEach(vertexRow -> vertices.addAll(vertexRow.vertexArrayList()));
+        vertexArrayList.forEach(vertexRow -> vertices.addAll(vertexRow.getVertices()));
         return vertices;
     }
 
 
-    public record VertexRow(ArrayList<Vertex> vertexArrayList, Integer id) {
+    public static class VertexRow {
+        private final ArrayList<Vertex> vertices;
+        private final Integer id;
+
+        public VertexRow(ArrayList<Vertex> vertices, Integer id) {
+            this.vertices = vertices;
+            this.id = id;
+        }
+
+        public ArrayList<Vertex> getVertices() {
+            return vertices;
+        }
+
+        public Integer getId() {
+            return id;
+        }
     }
 
 }

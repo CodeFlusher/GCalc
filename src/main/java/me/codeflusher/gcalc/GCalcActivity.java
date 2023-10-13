@@ -96,7 +96,7 @@ public class GCalcActivity implements IApplication {
         }
         ArrayList<Triangle> triangles = Triangle.createTriangleMesh(vertices, isStatic);
 
-        ArrayList<Float> vertFloats = new ArrayList<>() {
+        ArrayList<Float> vertFloats = new ArrayList<Float>() {
             {
                 for (Vertex vert :
                         vertices) {
@@ -106,7 +106,7 @@ public class GCalcActivity implements IApplication {
                 }
             }
         };
-        ArrayList<Integer> tris = new ArrayList<>() {
+        ArrayList<Integer> tris = new ArrayList<Integer>() {
             {
                 for (Triangle vert :
                         triangles) {
@@ -240,7 +240,7 @@ public class GCalcActivity implements IApplication {
 
         glPane.setAlignment(Pos.TOP_LEFT);
         glPane.setPadding(new Insets(16));
-        var glPaneRow = new VBox();
+        VBox glPaneRow = new VBox();
         glPaneRow.getChildren().addAll(frameRate, staticMeshProcessionTime, averageDynamicMeshProcessionTime, isExpressionFailedToBuild);
         glPane.getChildren().add(glPaneRow);
 

@@ -48,7 +48,7 @@ public class GAppWindowManager {
         this.lwjguiWindow = LWJGUI.initialize(window);
 
         lwjguiWindow.setResizible(true);
-        var config = ConfigManager.getConfig();
+        Config config = ConfigManager.getConfig();
 
         this.show();
 

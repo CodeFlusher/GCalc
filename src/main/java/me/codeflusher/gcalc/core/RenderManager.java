@@ -8,6 +8,9 @@ import me.codeflusher.gcalc.entity.Model;
 import me.codeflusher.gcalc.util.Constants;
 import me.codeflusher.gcalc.util.Transformation;
 import me.codeflusher.gcalc.util.Utils;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL46;
 
 public class RenderManager implements IGRender {
@@ -46,6 +49,7 @@ public class RenderManager implements IGRender {
 
     @Override
     public void render(Context context) {
+        drawAxes();
         clear();
         //shader.bind();
 
@@ -55,7 +59,7 @@ public class RenderManager implements IGRender {
         shader.bind();
         shader.setUniform("projectionMatrix", window.updateProjectionMatrix());
         shader.setUniform("viewMatrix", Transformation.getViewMatrix(scene.getCamera()));
-        drawAxes();
+
 
         GL46.glDisable(GL46.GL_CULL_FACE);
         GL46.glDisable(GL46.GL_SCISSOR_TEST);
@@ -69,5 +73,7 @@ public class RenderManager implements IGRender {
         GL46.glDisableVertexAttribArray(0);
         GL46.glBindVertexArray(0);
         shader.unbind();
+
+
     }
 }
