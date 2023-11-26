@@ -22,6 +22,27 @@ public class Utils {
         return buffer;
     }
 
+    public static int parseInt(String s){
+        StringBuilder builder = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (Constants.NUM_MAP.getOrDefault(c, -1) != -1){
+                builder.append(c);
+            }
+        }
+        return Integer.parseInt(builder.toString());
+    }
+
+    public static float clampFloat(float value, float minimum, float maximum){
+        if (value < minimum) return minimum;
+        return Math.min(value, maximum);
+    }
+    public static int limitSizeOfModel(int inputSize){
+        if (inputSize < 16){
+            return 16;
+        }
+        return Math.min(inputSize, 1536);
+    }
+
     public static float[] toFloatArray(List<Float> floatList) {
         float[] floatArray = new float[floatList.size()];
         int i = 0;

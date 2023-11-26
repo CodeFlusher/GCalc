@@ -18,7 +18,7 @@ public class ObjectLoader {
         storeDataInAttributeList(0, 3, vertices);
         storeIndicesBuffer(indices);
         unbind();
-        return new Model(id, vertices.length / 3);
+        return new Model(id, vertices.length / 3, GL46.GL_TRIANGLES, 1f);
     }
 
     private int createVAO() {
@@ -33,7 +33,7 @@ public class ObjectLoader {
         vbos.add(vbo);
         GL46.glBindBuffer(GL46.GL_ELEMENT_ARRAY_BUFFER, vbo);
         IntBuffer buffer = Utils.storeDatgaInIntBuffer(indices);
-        GL46.glBufferData(GL46.GL_ELEMENT_ARRAY_BUFFER, buffer, GL46.GL_DYNAMIC_DRAW);
+        GL46.glBufferData(GL46.GL_ELEMENT_ARRAY_BUFFER, buffer, GL46.GL_STATIC_DRAW);
     }
 
     private void storeDataInAttributeList(int attribNo, int vertexCount, float[] data) {

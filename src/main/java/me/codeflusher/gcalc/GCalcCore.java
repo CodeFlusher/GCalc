@@ -40,10 +40,6 @@ public class GCalcCore {
         return windowManager;
     }
 
-    public static EngineManager getEngine() {
-        return engine;
-    }
-
     public static IApplication getApplicationInstance() {
         return applicationInstance;
     }

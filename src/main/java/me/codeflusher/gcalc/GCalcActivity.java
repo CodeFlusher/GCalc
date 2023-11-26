@@ -20,8 +20,9 @@ import me.codeflusher.gcalc.core.GAppWindowManager;
 import me.codeflusher.gcalc.core.RenderManager;
 import me.codeflusher.gcalc.core.application.AppScene;
 import me.codeflusher.gcalc.core.application.IApplication;
-import me.codeflusher.gcalc.core.application.Map;
 import me.codeflusher.gcalc.core.application.MouseInput;
+import me.codeflusher.gcalc.core.application.RenderMap;
+import me.codeflusher.gcalc.entity.Model;
 import me.codeflusher.gcalc.entity.ObjectLoader;
 import me.codeflusher.gcalc.mesh.Triangle;
 import me.codeflusher.gcalc.mesh.Vertex;
@@ -41,12 +42,11 @@ import java.util.ArrayList;
 
 public class GCalcActivity implements IApplication {
 
-    private static final Float CAMERA_MOVEMENT_SPEED = 0.05f;
+    private static Float CAMERA_MOVEMENT_SPEED = 0.05f;
     private final RenderManager renderer;
     private final ObjectLoader loader;
     private final AppScene scene;
     private final GAppWindowManager window;
-    private final float color = 0.0f;
     private final Vector3f cameraInc;
     private Tristate isMovingGraph;
     private int updateCounter;
@@ -56,6 +56,7 @@ public class GCalcActivity implements IApplication {
     private float aState;
     private ExpressionBuilder expressionBuilder;
     private Label averageDynamicMeshProcessionTime;
+    private Label flightSpeedLabel;
     private Label staticMeshProcessionTime;
     private Label frameRate;
     private Label isExpressionFailedToBuild;
@@ -66,7 +67,8 @@ public class GCalcActivity implements IApplication {
         this.loader = new ObjectLoader();
         Config config = ConfigManager.getConfig();
         aState = config.getASliderState();
-        scene = new AppScene(new Map(), new Camera());
+        scene = new AppScene(new RenderMap(), new Camera());
+
         isMovingGraph = Tristate.AWAIT;
         scene.getCamera().setPosition(new Vector3f(5, 5, 5));
         cameraInc = new Vector3f(0, 0, 0);
@@ -79,13 +81,15 @@ public class GCalcActivity implements IApplication {
         updateCounter = 0;
         totalTimeCounted = 0;
         renderer.initializeRendering();
+
+        scene.getMap().addActor(Constants.LINE_X_IDENTIFIER,Model.createLine((float) (Constants.MODEL_SIZE/Math.sqrt(2)),0,0, new Vector3f(1,0,0)));
+        scene.getMap().addActor(Constants.LINE_Y_IDENTIFIER,Model.createLine(0,(float) (Constants.MODEL_SIZE/Math.sqrt(2)),0, new Vector3f(0,1,0)));
+        scene.getMap().addActor(Constants.LINE_Z_IDENTIFIER,Model.createLine(0,0,(float) (Constants.MODEL_SIZE/Math.sqrt(2)), new Vector3f(0,0,1)));
         scene.getMap().addActor(Constants.MODEL_IDENTIFIER, loader.loadModel(new float[]{1, 1, 1, 1, 1, 1},
                 new int[]{1, 1, 1, 1, 1, 1}));
     }
 
-    //(float) (10*Math.cos(x)+10*Math.sin(y))
     public void updateModel() {
-        // LogSystem.log("Mesh compute", "Starting mesh computation");
         long startTime = System.nanoTime();
         boolean isStatic = isMovingGraph != Tristate.RUN;
 
@@ -190,6 +194,7 @@ public class GCalcActivity implements IApplication {
             GL46.glViewport(0, 0, window.getWidth(), window.getHeight());
             window.setResizeable(true);
         }
+        float color = 0.0f;
         window.setClearColor(color, color, color, 0.0f);
     }
 
@@ -230,10 +235,12 @@ public class GCalcActivity implements IApplication {
         this.averageDynamicMeshProcessionTime = new Label("Average dynamic mesh procession time is undefined");
         this.frameRate = new Label("Framerate undefined");
         this.isExpressionFailedToBuild = new Label();
+        this.flightSpeedLabel = new Label("Current flight speed: " + CAMERA_MOVEMENT_SPEED);
 
         staticMeshProcessionTime.setFontSize(28);
         averageDynamicMeshProcessionTime.setFontSize(28);
         frameRate.setFontSize(28);
+        flightSpeedLabel.setFontSize(28);
         isExpressionFailedToBuild.setFontSize(32);
         isExpressionFailedToBuild.setTextFill(Color.RED);
         isExpressionFailedToBuild.setFontStyle(FontStyle.BOLD);
@@ -241,8 +248,13 @@ public class GCalcActivity implements IApplication {
         glPane.setAlignment(Pos.TOP_LEFT);
         glPane.setPadding(new Insets(16));
         VBox glPaneRow = new VBox();
-        glPaneRow.getChildren().addAll(frameRate, staticMeshProcessionTime, averageDynamicMeshProcessionTime, isExpressionFailedToBuild);
+        glPaneRow.getChildren().addAll(frameRate, staticMeshProcessionTime, averageDynamicMeshProcessionTime, flightSpeedLabel, isExpressionFailedToBuild);
         glPane.getChildren().add(glPaneRow);
+        glPane.setOnMouseScrolled(event -> {
+            LogSystem.debugLog("Scroll event debug", event.y);
+            CAMERA_MOVEMENT_SPEED = Utils.clampFloat((float) (CAMERA_MOVEMENT_SPEED + event.y/100), Constants.MIN_FLIGHT_SPEED, Constants.MAX_FLIGHT_SPEED);
+            this.flightSpeedLabel.setText("Current flight speed: " + CAMERA_MOVEMENT_SPEED);
+        });
 
         TextField staticMeshResolutionField = new TextField();
         Label staticMeshResolutionLabel = new Label("Static mesh resolution");
@@ -316,16 +328,16 @@ public class GCalcActivity implements IApplication {
                 this.isExpressionFailedToBuild.setText("Failed to parse expression.");
                 LogSystem.exception("Expression Build", e);
             }
-            Config newConfig = new Config(config.getVSync(),
+            Config newConfig = new Config(config.getAntialiasingSamples(),config.getVSync(),
                     graphEquation.getText(),
                     (int) (aParamSlider.getValue()),
-                    new ParamRange(Integer.parseInt(aRangeField.getText()), false),
-                    new ParamRange(Integer.parseInt(xRangeField.getText()), false),
-                    new ParamRange(Integer.parseInt(yRangeField.getText()), false),
+                    new ParamRange(Utils.parseInt(aRangeField.getText()), false),
+                    new ParamRange(Utils.parseInt(xRangeField.getText()), false),
+                    new ParamRange(Utils.parseInt(yRangeField.getText()), false),
                     config.getResolutionX(),
                     config.getResolutionY(),
-                    Integer.parseInt(staticMeshResolutionField.getText()),
-                    Integer.parseInt(dynamicMeshResolutionField.getText()),
+                    Integer.parseInt(String.valueOf(Utils.limitSizeOfModel(Utils.parseInt(staticMeshResolutionField.getText())))),
+                    Integer.parseInt(String.valueOf(Utils.limitSizeOfModel(Utils.parseInt(dynamicMeshResolutionField.getText())))),
                     config.getDebug());
             try {
                 ConfigManager.writeConfig(newConfig);

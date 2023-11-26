@@ -14,16 +14,17 @@ jar {
                 'Main-Class': 'me.codeflusher.gcalc.GCalcCore'
         )
     }
+
 }
 
 kotlin.compilerOptions.jvmTarget.set(JvmTarget.JVM_1_8)
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
 project.ext.lwjglVersion = "3.2.3"
-project.ext.lwjglNatives = "natives-windows"
 project.ext.jomlVersion = "1.10.0"
 project.ext.jomlPrimVersion = "1.10.0"
 
+project.ext.lwjglNatives = "natives-windows"
 
 
 group = 'me.codeflusher'
@@ -36,85 +37,28 @@ repositories {
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
-//    testImplementation 'org.junit.jupiter:junit-jupiter'
 
     implementation 'com.google.code.gson:gson:2.10.1'
 
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
 
     implementation "org.joml:joml:${jomlVersion}"
-//    implementation "org.joml:joml-primitives:${jomlPrimVersion}"
 
     implementation 'com.github.orange451:LWJGUI:pre-mt'
 
     implementation "net.objecthunter:exp4j:0.4.8"
 
     implementation "org.lwjgl:lwjgl"
-//    implementation "org.lwjgl:lwjgl-assimp"
-//    implementation "org.lwjgl:lwjgl-bgfx"
-//    implementation "org.lwjgl:lwjgl-cuda"
-//    implementation "org.lwjgl:lwjgl-egl"
     implementation "org.lwjgl:lwjgl-glfw"
-//    implementation "org.lwjgl:lwjgl-jawt"
-//    implementation "org.lwjgl:lwjgl-jemalloc"
-//    implementation "org.lwjgl:lwjgl-libdivide"
-//    implementation "org.lwjgl:lwjgl-llvm"
-//    implementation "org.lwjgl:lwjgl-lmdb"
-//    implementation "org.lwjgl:lwjgl-lz4"
-//    implementation "org.lwjgl:lwjgl-meow"
-//    implementation "org.lwjgl:lwjgl-nanovg"
-//    implementation "org.lwjgl:lwjgl-nfd"
-//    implementation "org.lwjgl:lwjgl-nuklear"
-//    implementation "org.lwjgl:lwjgl-odbc"
-//    implementation "org.lwjgl:lwjgl-openal"
-//    implementation "org.lwjgl:lwjgl-opencl"
     implementation "org.lwjgl:lwjgl-opengl"
-//    implementation "org.lwjgl:lwjgl-opengles"
-//    implementation "org.lwjgl:lwjgl-openvr"
-//    implementation "org.lwjgl:lwjgl-opus"
-//    implementation "org.lwjgl:lwjgl-ovr"
-//    implementation "org.lwjgl:lwjgl-par"
-//    implementation "org.lwjgl:lwjgl-remotery"
-//    implementation "org.lwjgl:lwjgl-rpmalloc"
-//    implementation "org.lwjgl:lwjgl-shaderc"
-//    implementation "org.lwjgl:lwjgl-sse"
-//    implementation "org.lwjgl:lwjgl-stb"
-//    implementation "org.lwjgl:lwjgl-tinyexr"
-//    implementation "org.lwjgl:lwjgl-tinyfd"
-//    implementation "org.lwjgl:lwjgl-tootle"
-//    implementation "org.lwjgl:lwjgl-vma"
-//    implementation "org.lwjgl:lwjgl-vulkan"
-//    implementation "org.lwjgl:lwjgl-xxhash"
-//    implementation "org.lwjgl:lwjgl-yoga"
-//    implementation "org.lwjgl:lwjgl-zstd"
+    implementation "org.lwjgl:lwjgl-nanovg"
     runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-assimp::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-bgfx::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-jemalloc::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-libdivide::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-llvm::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-lmdb::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-lz4::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-meow::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-nanovg::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-nfd::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-nuklear::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-opengles::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-openvr::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-opus::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-ovr::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-par::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-remotery::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-rpmalloc::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-shaderc::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-sse::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
-//    runtimeOnly "org.lwjgl:lwjgl-tinyexr::$lwjglNatives"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
+//    shadowRuntimeElements("org.lwjgl:lwjgl::$lwjglNatives")
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 
@@ -122,5 +66,11 @@ test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(20)
+    jvmToolchain(8)
+}
+
+tasks.configureEach{
+    if (hasProperty("duplicatesStrategy")){
+        setProperty("duplicatesStrategy", DuplicatesStrategy.INCLUDE)
+    }
 }

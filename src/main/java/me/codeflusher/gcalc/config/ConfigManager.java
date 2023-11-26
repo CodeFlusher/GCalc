@@ -2,12 +2,10 @@ package me.codeflusher.gcalc.config;
 
 import com.google.gson.Gson;
 import me.codeflusher.gcalc.util.LogSystem;
-import org.lwjgl.system.CallbackI;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
@@ -16,7 +14,7 @@ public class ConfigManager {
     private static Config config;
 
     private static void defaultConfig() {
-        config = new Config(true, "sin(x+y)*a", 2, new ParamRange(5, false), new ParamRange(5, false), new ParamRange(5, false), 800, 600, 512, 64, false);
+        config = new Config(4,true, "sin(x+y)*a", 2, new ParamRange(5, false), new ParamRange(5, false), new ParamRange(5, false), 800, 600, 512, 64, false);
     }
 
     public static void loadConfigFromDisk() {
@@ -48,7 +46,7 @@ public class ConfigManager {
             try {
                 writeConfig(getConfig());
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                LogSystem.exception("Config IO", e);
             }
         }
     }

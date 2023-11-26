@@ -6,7 +6,6 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class VertexSolver {
 

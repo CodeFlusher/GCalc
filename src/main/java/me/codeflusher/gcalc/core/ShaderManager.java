@@ -1,6 +1,7 @@
 package me.codeflusher.gcalc.core;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL46;
 import org.lwjgl.system.MemoryStack;
 
@@ -38,6 +39,13 @@ public class ShaderManager {
 
     public void setUniform(String uniformName, int value) {
         GL46.glUniform1i(uniforms.get(uniformName), value);
+    }
+    public void setUniform(String uniformName, float value) {
+        GL46.glUniform1f(uniforms.get(uniformName), value);
+    }
+
+    public void setUniform(String uniformName, Vector3f value){
+        GL46.glUniform3fv(uniforms.get(uniformName),new float[]{value.x, value.y, value.z});
     }
 
     public void createVertexShader(String shaderCode) throws Exception {

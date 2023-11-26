@@ -3,6 +3,7 @@ package me.codeflusher.gcalc.config
 import java.io.Serializable
 
 data class Config(
+    val antialiasingSamples: Int,
     val vSync: Boolean,
     val latestPrompt: String,
     val aSliderState: Int,
