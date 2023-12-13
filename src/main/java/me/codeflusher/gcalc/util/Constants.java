@@ -6,6 +6,7 @@ import java.util.Map;
 public class Constants {
     public static final String APP_NAME = "GCalc Pre-release";
     public static final Integer MODEL_SIZE = 25;
+    public static final Integer ARROW_TIP_SIZE = 1;
     public static final Identifier MODEL_IDENTIFIER = new Identifier("graph_model");
     public static final Identifier LINE_X_IDENTIFIER = new Identifier("line_x");
     public static final Identifier LINE_Y_IDENTIFIER = new Identifier("line_y");

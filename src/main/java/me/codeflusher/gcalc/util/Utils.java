@@ -54,6 +54,20 @@ public class Utils {
         return floatArray;
     }
 
+    public static int getMultipilier(int value) {
+        return value == 0 ? 0 : 1;
+    }
+
+    public static float[] combineArrays(float[] firstArray, float[] secondArray) {
+
+        int fal = firstArray.length;
+        int sal = secondArray.length;
+        float[] result = new float[fal + sal];
+        System.arraycopy(firstArray, 0, result, 0, fal);
+        System.arraycopy(secondArray, 0, result, fal, sal);
+        return result;
+    }
+
     public static int[] toIntArray(List<Integer> integers) {
         int[] intArray = new int[integers.size()];
         int i = 0;

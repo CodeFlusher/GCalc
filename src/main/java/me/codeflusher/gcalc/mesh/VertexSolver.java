@@ -13,9 +13,9 @@ public class VertexSolver {
 
     private static Float a;
 
-    public static Vertex createVertex(Expression predicate, Integer x, Integer y, VertexAttributeCompute attributeCompute) throws Exception {
-        double eq = predicate.setVariable("y", attributeCompute.modifyY(y)).setVariable("x", attributeCompute.modifyX(x)).setVariable("a", a).evaluate();
-        return new Vertex(attributeCompute.getVertexPosition(x), attributeCompute.getVertexPosition(y), (float) eq);
+    public static Vertex createVertex(Expression predicate, Integer x, Integer y, VertexAttributeCompute attributeCompute) {
+        predicate.setVariable("y", attributeCompute.modifyY(y)).setVariable("x", attributeCompute.modifyX(x)).setVariable("a", a);
+        return new Vertex(attributeCompute.getVertexPosition(x), attributeCompute.getVertexPosition(y), (float) predicate.evaluate());
     }
 
     public static Vertex[] createTriangle(Expression predicate, Integer x, Integer y, VertexAttributeCompute attributeCompute, Boolean isOdd) {

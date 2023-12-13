@@ -22,7 +22,7 @@ import me.codeflusher.gcalc.core.application.AppScene;
 import me.codeflusher.gcalc.core.application.IApplication;
 import me.codeflusher.gcalc.core.application.MouseInput;
 import me.codeflusher.gcalc.core.application.RenderMap;
-import me.codeflusher.gcalc.entity.Model;
+import me.codeflusher.gcalc.entity.Models;
 import me.codeflusher.gcalc.entity.ObjectLoader;
 import me.codeflusher.gcalc.mesh.Triangle;
 import me.codeflusher.gcalc.mesh.Vertex;
@@ -82,9 +82,9 @@ public class GCalcActivity implements IApplication {
         totalTimeCounted = 0;
         renderer.initializeRendering();
 
-        scene.getMap().addActor(Constants.LINE_X_IDENTIFIER, Model.createLine((float) (Constants.MODEL_SIZE / Math.sqrt(2)), 0, 0, new Vector3f(1, 0, 0)));
-        scene.getMap().addActor(Constants.LINE_Y_IDENTIFIER, Model.createLine(0, (float) (Constants.MODEL_SIZE / Math.sqrt(2)), 0, new Vector3f(0, 1, 0)));
-        scene.getMap().addActor(Constants.LINE_Z_IDENTIFIER, Model.createLine(0, 0, (float) (Constants.MODEL_SIZE / Math.sqrt(2)), new Vector3f(0, 0, 1)));
+        scene.getMap().addActor(Constants.LINE_X_IDENTIFIER, Models.createArrow((float) (Constants.MODEL_SIZE / Math.sqrt(2)), 0, 0, new Vector3f(1, 0, 0)));
+        scene.getMap().addActor(Constants.LINE_Y_IDENTIFIER, Models.createArrow(0, (float) (Constants.MODEL_SIZE / Math.sqrt(2)), 0, new Vector3f(0, 0, 1)));
+        scene.getMap().addActor(Constants.LINE_Z_IDENTIFIER, Models.createArrow(0, 0, (float) (Constants.MODEL_SIZE / Math.sqrt(2)), new Vector3f(0, 1, 0)));
         scene.getMap().addActor(Constants.MODEL_IDENTIFIER, loader.loadModel(new float[]{1, 1, 1, 1, 1, 1},
                 new int[]{1, 1, 1, 1, 1, 1}));
     }
