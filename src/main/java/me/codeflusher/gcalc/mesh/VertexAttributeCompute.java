@@ -36,6 +36,7 @@ public class VertexAttributeCompute {
     public float modifyY(Integer y) {
         return (y - (float) resolution / 2) / scaleY;
     }
+
     public int getResolution() {
         return resolution;
     }
