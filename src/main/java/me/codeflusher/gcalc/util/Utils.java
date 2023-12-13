@@ -1,5 +1,8 @@
 package me.codeflusher.gcalc.util;
 
+import me.codeflusher.gcalc.config.Config;
+import me.codeflusher.gcalc.config.ConfigManager;
+import me.codeflusher.gcalc.config.ParamRange;
 import org.lwjgl.system.MemoryUtil;
 
 import java.io.InputStream;

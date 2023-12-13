@@ -53,45 +53,55 @@ public class Models {
     }
 
     public static ArrayList<Float> createLine(Direction dir, Integer lenght, float x, float y, float z) {
-        return new ArrayList<Float>() {
+        return new ArrayList<Float>(){
             {
-                add((float) (lenght * dir.getxMult()) + x);
-                add((float) (lenght * dir.getyMult()) + y);
-                add((float) (lenght * dir.getzMult()) + z);
-                add((float) (-1 * lenght * dir.getxMult()) + x);
-                add((float) (-1 * lenght * dir.getyMult()) + y);
-                add((float) (-1 * lenght * dir.getzMult()) + z);
+                add(dir.getxMult() * lenght + x);
+                add(dir.getyMult() * lenght + y);
+                add(dir.getzMult() * lenght + z);
+                add(-1 * dir.getxMult() * lenght + x);
+                add(-1 * dir.getyMult() * lenght + y);
+                add(-1 * dir.getzMult() * lenght + z);
+
             }
         };
+//        switch (dir){
+//            case X:
+//                return new ArrayList<Float>(){
+//                    {
+//                        add(lenght);
+//                    }
+//                }
+//        }
     }
 
     public static Model createGrid(Direction dir) {
         ArrayList<Float> vertices = new ArrayList<>();
 
         Config config = ConfigManager.getConfig();
-        ParamRange range;
-        if (dir == Direction.Z)
-            range = new ParamRange(5, false);
-        else
-            range = dir == Direction.X ? config.getRangeX() : config.getRangeY();
+        ParamRange rangeX = config.getRangeX();
+        ParamRange rangeY = config.getRangeY();
+        ParamRange rangeZ = new ParamRange(5, false);
 
-        float step = (float) Constants.MODEL_SIZE / (2 * range.getMax());
+
+        float stepX = (float) Constants.MODEL_SIZE / (2 * rangeX.getMax());
+        float stepY = (float) Constants.MODEL_SIZE / (2 * rangeY.getMax());
+        float stepZ = (float) Constants.MODEL_SIZE / (2 * rangeZ.getMax());
 
         switch (dir) {
             case X:
-                for (int i = -1*range.getMax(); i <= range.getMax(); i++) {
-                    vertices.addAll(createLine(dir, (int) (Constants.MODEL_SIZE / Constants.APPROXIMATE_ROOT_OF_3), 0, 0, i * step));
-                    vertices.addAll(createLine(Direction.Y, (int) (Constants.MODEL_SIZE /  Constants.APPROXIMATE_ROOT_OF_3), 0, i * step, 0));
+                for (int i = -1*rangeX.getMax(); i <= rangeX.getMax(); i++) {
+                    vertices.addAll(createLine(Direction.Y, (int) (Constants.MODEL_SIZE / Constants.APPROXIMATE_ROOT_OF_3), i * stepX, 0, 0));
+                    vertices.addAll(createLine(Direction.Z, (int) (Constants.MODEL_SIZE /  Constants.APPROXIMATE_ROOT_OF_3), i * stepX, 0,0 ));
                 }
             case Y:
-                for (int i = -1*range.getMax(); i <= range.getMax(); i++) {
-                    vertices.addAll(createLine(dir, (int) (Constants.MODEL_SIZE /  Constants.APPROXIMATE_ROOT_OF_3), 0, 0, i * step));
-                    vertices.addAll(createLine(Direction.Y, (int) (Constants.MODEL_SIZE /  Constants.APPROXIMATE_ROOT_OF_3), i * step, 0, 0));
+                for (int i = -1*rangeY.getMax(); i <= rangeY.getMax(); i++) {
+                    vertices.addAll(createLine(Direction.X, (int) (Constants.MODEL_SIZE / Constants.APPROXIMATE_ROOT_OF_3), 0, 0, i * stepY));
+                    vertices.addAll(createLine(Direction.Y, (int) (Constants.MODEL_SIZE /  Constants.APPROXIMATE_ROOT_OF_3), 0,0, i * stepY));
                 }
             case Z:
-                for (int i = -1*range.getMax(); i <= range.getMax(); i++) {
-                    vertices.addAll(createLine(dir, (int) (Constants.MODEL_SIZE /  Constants.APPROXIMATE_ROOT_OF_3), 0, i * step, 0));
-                    vertices.addAll(createLine(Direction.Y, (int) (Constants.MODEL_SIZE /  Constants.APPROXIMATE_ROOT_OF_3), i * step, 0, 0));
+                for (int i = -1*rangeZ.getMax(); i <= rangeZ.getMax(); i++) {
+                    vertices.addAll(createLine(Direction.Z, (int) (Constants.MODEL_SIZE / Constants.APPROXIMATE_ROOT_OF_3), 0, i * stepZ, 0));
+                    vertices.addAll(createLine(Direction.X, (int) (Constants.MODEL_SIZE /  Constants.APPROXIMATE_ROOT_OF_3), 0, i * stepZ,0));
                 }
         }
 
@@ -125,8 +135,6 @@ public class Models {
                 5, 6,
                 7, 8,
                 9, 10,
-
-
         };
 
         vertices = Utils.combineArrays(vertices, getArrowTipVertices(x, y, z));
