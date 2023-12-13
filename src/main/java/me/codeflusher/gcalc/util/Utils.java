@@ -54,10 +54,6 @@ public class Utils {
         return floatArray;
     }
 
-    public static int getMultipilier(int value) {
-        return value == 0 ? 0 : 1;
-    }
-
     public static float[] combineArrays(float[] firstArray, float[] secondArray) {
 
         int fal = firstArray.length;

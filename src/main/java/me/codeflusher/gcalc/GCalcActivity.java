@@ -28,10 +28,7 @@ import me.codeflusher.gcalc.mesh.Triangle;
 import me.codeflusher.gcalc.mesh.Vertex;
 import me.codeflusher.gcalc.mesh.VertexSolver;
 import me.codeflusher.gcalc.user.Camera;
-import me.codeflusher.gcalc.util.Constants;
-import me.codeflusher.gcalc.util.LogSystem;
-import me.codeflusher.gcalc.util.Tristate;
-import me.codeflusher.gcalc.util.Utils;
+import me.codeflusher.gcalc.util.*;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -82,6 +79,10 @@ public class GCalcActivity implements IApplication {
         totalTimeCounted = 0;
         renderer.initializeRendering();
 
+
+        scene.getMap().addActor(Constants.GRID_X_IDENTIFIER, Models.createGrid(Direction.X));
+        scene.getMap().addActor(Constants.GRID_Y_IDENTIFIER, Models.createGrid(Direction.Y));
+        scene.getMap().addActor(Constants.GRID_Z_IDENTIFIER, Models.createGrid(Direction.Z));
         scene.getMap().addActor(Constants.LINE_X_IDENTIFIER, Models.createArrow((float) (Constants.MODEL_SIZE / Math.sqrt(2)), 0, 0, new Vector3f(1, 0, 0)));
         scene.getMap().addActor(Constants.LINE_Y_IDENTIFIER, Models.createArrow(0, (float) (Constants.MODEL_SIZE / Math.sqrt(2)), 0, new Vector3f(0, 0, 1)));
         scene.getMap().addActor(Constants.LINE_Z_IDENTIFIER, Models.createArrow(0, 0, (float) (Constants.MODEL_SIZE / Math.sqrt(2)), new Vector3f(0, 1, 0)));
@@ -345,6 +346,9 @@ public class GCalcActivity implements IApplication {
                 LogSystem.exception("Config IO", e);
             }
             ConfigManager.loadConfigFromDisk();
+            scene.getMap().addActor(Constants.GRID_X_IDENTIFIER, Models.createGrid(Direction.X));
+            scene.getMap().addActor(Constants.GRID_Y_IDENTIFIER, Models.createGrid(Direction.Y));
+            scene.getMap().addActor(Constants.GRID_Z_IDENTIFIER, Models.createGrid(Direction.Z));
             updateModel();
         });
 

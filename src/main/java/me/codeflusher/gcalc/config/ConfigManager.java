@@ -9,14 +9,29 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
+/**
+ * Class for config management
+ *
+ * @author CodeFlusher
+ * @version 1.0
+ **/
 public class ConfigManager {
     public static final String CONFIG_PATH = "config/config.json";
     private static Config config;
 
+
+    /**
+     * Resets config to default
+     **/
     private static void defaultConfig() {
         config = new Config(4, true, "sin(x+y)*a", 2, new ParamRange(5, false), new ParamRange(5, false), new ParamRange(5, false), 800, 600, 512, 64, false);
     }
 
+    /**
+     * This method is used to load config from disk
+     * Config is being read from config/config.json
+     * If config doesn't exist, it will replace it with default.
+     **/
     public static void loadConfigFromDisk() {
         File configFile = new File(CONFIG_PATH);
 
@@ -51,6 +66,9 @@ public class ConfigManager {
         }
     }
 
+    /**
+     * The same as loadConfigFromDisk, but this method doesn't log anything.
+     **/
     public static void firstLoadConfigFromDisk() {
         File configFile = new File(CONFIG_PATH);
 
@@ -83,6 +101,12 @@ public class ConfigManager {
         }
     }
 
+    /**
+     * Writes config to the config/config.json
+     *
+     * @param config Config that will be written
+     * @throws java.io.IOException Will be thrown if method couldn't write config
+     **/
     public static void writeConfig(Config config) throws Exception {
         File file = new File(CONFIG_PATH);
         if (!file.exists()) {
@@ -96,6 +120,12 @@ public class ConfigManager {
         writer.close();
     }
 
+    /**
+     * Writes config to the config/config.json, but without logging
+     *
+     * @param config Config that will be written
+     * @throws java.io.IOException Will be thrown if method couldn't write config
+     **/
     public static void firstWriteConfig(Config config) throws Exception {
         File file = new File(CONFIG_PATH);
         if (!file.exists()) {
@@ -109,6 +139,9 @@ public class ConfigManager {
         writer.close();
     }
 
+    /**
+     * @return Current config
+     **/
     public static Config getConfig() {
         return config;
     }

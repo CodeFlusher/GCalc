@@ -2,6 +2,13 @@ package me.codeflusher.gcalc.core.application;
 
 import lwjgui.scene.layout.Pane;
 
+
+/**
+ * Interface that represents basic app that can be launched on top of the engine
+ *
+ * @author CodeFlusher
+ * @version 1.0
+ **/
 public interface IApplication {
     void init() throws Exception;
 

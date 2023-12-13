@@ -9,8 +9,13 @@ public class Constants {
     public static final Integer ARROW_TIP_SIZE = 1;
     public static final Identifier MODEL_IDENTIFIER = new Identifier("graph_model");
     public static final Identifier LINE_X_IDENTIFIER = new Identifier("line_x");
+    public static final Identifier GRID_X_IDENTIFIER = new Identifier("grid_x");
     public static final Identifier LINE_Y_IDENTIFIER = new Identifier("line_y");
+    public static final Identifier GRID_Y_IDENTIFIER = new Identifier("grid_y");
     public static final Identifier LINE_Z_IDENTIFIER = new Identifier("line_z");
+    public static final Identifier GRID_Z_IDENTIFIER = new Identifier("grid_z");
+    public static final float APPROXIMATE_ROOT_OF_2 = 1.414F;
+    public static final float APPROXIMATE_ROOT_OF_3 = 1.732F;
     public static float MOUSE_SENSITIVITY = 0.2f;
     public static float MAX_FLIGHT_SPEED = 0.5f;
     public static float MIN_FLIGHT_SPEED = 0.01f;

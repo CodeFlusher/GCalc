@@ -2,6 +2,11 @@ package me.codeflusher.gcalc.config
 
 import java.io.Serializable
 
+/**
+ * Configuration class for GCalc
+ * @author CodeFlusher
+ * @version 1.0
+ * **/
 data class Config(
     val antialiasingSamples: Int,
     val vSync: Boolean,
