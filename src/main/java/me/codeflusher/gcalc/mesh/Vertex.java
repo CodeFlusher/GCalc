@@ -39,13 +39,4 @@ public class Vertex {
         return y;
     }
 
-
-    public float getZ() {
-        return z;
-    }
-
-    public boolean isExisting() {
-        return existing;
-    }
-
 }

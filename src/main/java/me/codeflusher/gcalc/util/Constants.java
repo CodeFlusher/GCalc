@@ -13,7 +13,7 @@ public class Constants {
     public static float MOUSE_SENSITIVITY = 0.2f;
     public static float MAX_FLIGHT_SPEED = 0.5f;
     public static float MIN_FLIGHT_SPEED = 0.01f;
-    public static Map<Character, Integer> NUM_MAP = new HashMap<Character, Integer>(){
+    public static Map<Character, Integer> NUM_MAP = new HashMap<Character, Integer>() {
         {
             put('0', 0);
             put('1', 1);

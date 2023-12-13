@@ -5,7 +5,7 @@ public enum Tristate {
     AWAIT,
     STOP;
 
-    public Tristate getInversed() {
+    public Tristate getInverted() {
         if (this == RUN) {
             return AWAIT;
         } else {

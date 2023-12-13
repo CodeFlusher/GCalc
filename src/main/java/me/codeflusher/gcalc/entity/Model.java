@@ -5,16 +5,30 @@ import org.lwjgl.opengl.GL46;
 
 public class Model {
     protected final int id;
-    protected Vector3f color = new Vector3f(0);
     protected final int vertexCounter;
+    protected Vector3f color = new Vector3f(0);
     protected int renderType;
-    protected float opactiy;
+    protected float opacity;
 
     public Model(int id, int vertexCounter, int renderType, float opactiy) {
         this.id = id;
         this.vertexCounter = vertexCounter;
         this.renderType = renderType;
-        this.opactiy = opactiy;
+        this.opacity = opactiy;
+    }
+
+    public static Model createLine(float x, float y, float z, Vector3f color) {
+        float[] vertices = {
+                -x, -y, -z,
+                x, y, z
+        };
+
+        ObjectLoader loader = new ObjectLoader();
+        loader.cleanup();
+        Model model = loader.loadModel(vertices, new int[]{1, 2});
+        model.color = color;
+        model.renderType = GL46.GL_LINES;
+        return model;
     }
 
     public int getId() {
@@ -33,21 +47,7 @@ public class Model {
         return vertexCounter;
     }
 
-    public float getOpactiy() {
-        return opactiy;
-    }
-
-    public static Model createLine(float x, float y, float z, Vector3f color) {
-        float[] verticies = {
-                -x,-y,-z,
-                x,y,z
-        };
-
-        ObjectLoader loader = new ObjectLoader();
-        loader.cleanup();
-        Model model = loader.loadModel(verticies, new int[]{1,2});
-        model.color = color;
-        model.renderType = GL46.GL_LINES;
-        return model;
+    public float getOpacity() {
+        return opacity;
     }
 }

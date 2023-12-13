@@ -36,13 +36,13 @@ public class ObjectLoader {
         GL46.glBufferData(GL46.GL_ELEMENT_ARRAY_BUFFER, buffer, GL46.GL_STATIC_DRAW);
     }
 
-    private void storeDataInAttributeList(int attribNo, int vertexCount, float[] data) {
+    private void storeDataInAttributeList(int attribute, int vertexCount, float[] data) {
         int vbo = GL46.glGenBuffers();
         vbos.add(vbo);
         GL46.glBindBuffer(GL46.GL_ARRAY_BUFFER, vbo);
         FloatBuffer buffer = Utils.storeDatgaInFloatBuffer(data);
         GL46.glBufferData(GL46.GL_ARRAY_BUFFER, buffer, GL46.GL_STATIC_DRAW);
-        GL46.glVertexAttribPointer(attribNo, vertexCount, GL46.GL_FLOAT, false, 0, 0);
+        GL46.glVertexAttribPointer(attribute, vertexCount, GL46.GL_FLOAT, false, 0, 0);
         GL46.glBindBuffer(GL46.GL_ARRAY_BUFFER, 0);
     }
 

@@ -29,15 +29,15 @@ public class Camera {
             position.z += (float) Math.cos(Math.toRadians(rotation.y - 90)) * x;
         }
         position.y += y;
-        position.x = Utils.clampFloat(position.x, -1*Constants.MODEL_SIZE, Constants.MODEL_SIZE);
-        position.y = Utils.clampFloat(position.y, -1*Constants.MODEL_SIZE, Constants.MODEL_SIZE);
-        position.z = Utils.clampFloat(position.z, -1*Constants.MODEL_SIZE, Constants.MODEL_SIZE);
+        position.x = Utils.clampFloat(position.x, -1 * Constants.MODEL_SIZE, Constants.MODEL_SIZE);
+        position.y = Utils.clampFloat(position.y, -1 * Constants.MODEL_SIZE, Constants.MODEL_SIZE);
+        position.z = Utils.clampFloat(position.z, -1 * Constants.MODEL_SIZE, Constants.MODEL_SIZE);
     }
 
     public void setPosition(float x, float y, float z) {
-        position.x = Utils.clampFloat(x, -1*Constants.MODEL_SIZE, Constants.MODEL_SIZE);
-        position.y = Utils.clampFloat(y, -1*Constants.MODEL_SIZE, Constants.MODEL_SIZE);
-        position.z = Utils.clampFloat(z, -1*Constants.MODEL_SIZE, Constants.MODEL_SIZE);
+        position.x = Utils.clampFloat(x, -1 * Constants.MODEL_SIZE, Constants.MODEL_SIZE);
+        position.y = Utils.clampFloat(y, -1 * Constants.MODEL_SIZE, Constants.MODEL_SIZE);
+        position.z = Utils.clampFloat(z, -1 * Constants.MODEL_SIZE, Constants.MODEL_SIZE);
     }
 
     public void setRotation(float x, float y, float z) {

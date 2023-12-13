@@ -36,27 +36,6 @@ public class VertexAttributeCompute {
     public float modifyY(Integer y) {
         return (y - (float) resolution / 2) / scaleY;
     }
-
-    public ParamRange getRangeOnX() {
-        return rangeOnX;
-    }
-
-    public ParamRange getRangeOnY() {
-        return rangeOnY;
-    }
-
-    public float getScaleX() {
-        return scaleX;
-    }
-
-    public float getVertexDensity() {
-        return vertexDensity;
-    }
-
-    public float getScaleY() {
-        return scaleY;
-    }
-
     public int getResolution() {
         return resolution;
     }

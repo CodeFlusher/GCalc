@@ -54,7 +54,6 @@ public class GAppWindowManager {
         this.show();
 
 
-
         lwjguiWindow.setScene(new Scene(GCalcCore.getApplicationInstance().createUI(), config.getResolutionX(), config.getResolutionY()));
         LogSystem.log("Window", "Window manager finished starting the window");
     }
@@ -67,7 +66,7 @@ public class GAppWindowManager {
             LogSystem.debugLog("TestHeight", height + " " + config.getResolutionY());
             LogSystem.debugLog("TestHeight", width + " " + config.getResolutionX());
             try {
-                ConfigManager.writeConfig(new Config(config.getAntialiasingSamples(),config.getVSync(), config.getLatestPrompt(), config.getASliderState(), config.getRangeA(), config.getRangeX(), config.getRangeY(), width, height, config.getStaticMeshResolution(), config.getDynamicMeshResolution(), config.getDebug()));
+                ConfigManager.writeConfig(new Config(config.getAntialiasingSamples(), config.getVSync(), config.getLatestPrompt(), config.getASliderState(), config.getRangeA(), config.getRangeX(), config.getRangeY(), width, height, config.getStaticMeshResolution(), config.getDynamicMeshResolution(), config.getDebug()));
                 LogSystem.log("Config IO", "Successfully update the config");
                 ConfigManager.loadConfigFromDisk();
                 config = ConfigManager.getConfig();

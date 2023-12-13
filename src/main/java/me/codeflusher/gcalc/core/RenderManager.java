@@ -14,7 +14,6 @@ import java.util.Collection;
 import static org.lwjgl.opengl.GL46.*;
 
 
-
 public class RenderManager implements IGRender {
     private final GAppWindowManager window;
     private ShaderManager shader;
@@ -47,10 +46,6 @@ public class RenderManager implements IGRender {
         assert application != null;
     }
 
-    public void drawAxes() {
-
-    }
-
     public void clear() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
@@ -61,7 +56,6 @@ public class RenderManager implements IGRender {
 
     @Override
     public void render(Context context) {
-        drawAxes();
         clear();
 
         glEnable(GL46.GL_DEPTH_TEST);
@@ -75,13 +69,13 @@ public class RenderManager implements IGRender {
         shader.setUniform("viewMatrix", Transformation.getViewMatrix(scene.getCamera()));
 
         Collection<Model> triangleModels = scene.getMap().getActorMapByRenderType(GL46.GL_TRIANGLES).values();
-//        LogSystem.debugLog("Triangle render loaded models", triangleModels);
+
         for (Model model : triangleModels) {
 
             glBindVertexArray(model.getId());
             glEnableVertexAttribArray(0);
 
-            shader.setUniform("opacity",model.getOpactiy());
+            shader.setUniform("opacity", model.getOpacity());
 
             glDrawArrays(model.getRenderType(), 0, model.getVertexCounter());
 
@@ -99,14 +93,16 @@ public class RenderManager implements IGRender {
         lineShader.setUniform("color", Transformation.getViewMatrix(scene.getCamera()));
 
         Collection<Model> graphLines = scene.getMap().getActorMapByRenderType(GL46.GL_LINES).values();
-//        LogSystem.debugLog("Lines render loaded models", graphLines);
 
         for (Model graphLine : graphLines) {
+
             glBindVertexArray(graphLine.getId());
             glEnableVertexAttribArray(0);
             glLineWidth(10f);
+
             lineShader.setUniform("color", graphLine.getColor());
-            lineShader.setUniform("opacity",graphLine.getOpactiy());
+            lineShader.setUniform("opacity", graphLine.getOpacity());
+
             glDrawArrays(graphLine.getRenderType(), 0, graphLine.getVertexCounter());
 
             glDisableVertexAttribArray(0);

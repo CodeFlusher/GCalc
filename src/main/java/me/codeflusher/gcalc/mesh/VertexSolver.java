@@ -39,39 +39,24 @@ public class VertexSolver {
             vertices.addAll(Arrays.asList(vertices1));
             vertices.addAll(Arrays.asList(vertices2));
         }
-        return new VertexRow(vertices, xPos);
+        return new VertexRow(vertices);
     }
 
     public static ArrayList<Vertex> getVertexMesh(ExpressionBuilder predicate, boolean isStatic, Float aState) {
         a = aState;
         VertexAttributeCompute attributeCompute = new VertexAttributeCompute(isStatic);
         int resolution = attributeCompute.getResolution();
-        //LogSystem.debugLog("Mesh Compute", attributeCompute);
         vertexArrayList = new ArrayList<>();
         vertexArrayList.ensureCapacity(resolution);
         for (int x = 0; x < resolution; x++) {
-            int finalX = x;
             Expression expression;
             try {
                 expression = predicate.build();
-                vertexArrayList.add(createRow(expression, finalX, attributeCompute));
+                vertexArrayList.add(createRow(expression, x, attributeCompute));
             } catch (Exception e) {
                 LogSystem.exception("Expression", e);
             }
         }
-//        boolean isDone = false;
-//        // LogSystem.debugLog("Mesh Compute", futures.size());
-//        while (!isDone) {
-//            isDone = futures.stream().allMatch(Future::isDone);
-//        }
-//        futures.forEach(future -> {
-//            try {
-//                VertexRow row = (VertexRow) future.get();
-//                vertexArrayList.add(row.id, row);
-//            } catch (Exception e) {
-//                LogSystem.exception("Mesh Compute", e);
-//            }
-//        });
         ArrayList<Vertex> vertices = new ArrayList<>();
         vertexArrayList.forEach(vertexRow -> vertices.addAll(vertexRow.getVertices()));
         return vertices;
@@ -80,19 +65,13 @@ public class VertexSolver {
 
     public static class VertexRow {
         private final ArrayList<Vertex> vertices;
-        private final Integer id;
 
-        public VertexRow(ArrayList<Vertex> vertices, Integer id) {
+        public VertexRow(ArrayList<Vertex> vertices) {
             this.vertices = vertices;
-            this.id = id;
         }
 
         public ArrayList<Vertex> getVertices() {
             return vertices;
-        }
-
-        public Integer getId() {
-            return id;
         }
     }
 

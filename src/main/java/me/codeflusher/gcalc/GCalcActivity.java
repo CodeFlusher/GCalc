@@ -77,14 +77,14 @@ public class GCalcActivity implements IApplication {
 
     @Override
     public void init() throws Exception {
-        LogSystem.debugLog("Initalizing Activity", "init");
+        LogSystem.debugLog("Initializing Activity", "init");
         updateCounter = 0;
         totalTimeCounted = 0;
         renderer.initializeRendering();
 
-        scene.getMap().addActor(Constants.LINE_X_IDENTIFIER,Model.createLine((float) (Constants.MODEL_SIZE/Math.sqrt(2)),0,0, new Vector3f(1,0,0)));
-        scene.getMap().addActor(Constants.LINE_Y_IDENTIFIER,Model.createLine(0,(float) (Constants.MODEL_SIZE/Math.sqrt(2)),0, new Vector3f(0,1,0)));
-        scene.getMap().addActor(Constants.LINE_Z_IDENTIFIER,Model.createLine(0,0,(float) (Constants.MODEL_SIZE/Math.sqrt(2)), new Vector3f(0,0,1)));
+        scene.getMap().addActor(Constants.LINE_X_IDENTIFIER, Model.createLine((float) (Constants.MODEL_SIZE / Math.sqrt(2)), 0, 0, new Vector3f(1, 0, 0)));
+        scene.getMap().addActor(Constants.LINE_Y_IDENTIFIER, Model.createLine(0, (float) (Constants.MODEL_SIZE / Math.sqrt(2)), 0, new Vector3f(0, 1, 0)));
+        scene.getMap().addActor(Constants.LINE_Z_IDENTIFIER, Model.createLine(0, 0, (float) (Constants.MODEL_SIZE / Math.sqrt(2)), new Vector3f(0, 0, 1)));
         scene.getMap().addActor(Constants.MODEL_IDENTIFIER, loader.loadModel(new float[]{1, 1, 1, 1, 1, 1},
                 new int[]{1, 1, 1, 1, 1, 1}));
     }
@@ -252,7 +252,7 @@ public class GCalcActivity implements IApplication {
         glPane.getChildren().add(glPaneRow);
         glPane.setOnMouseScrolled(event -> {
             LogSystem.debugLog("Scroll event debug", event.y);
-            CAMERA_MOVEMENT_SPEED = Utils.clampFloat((float) (CAMERA_MOVEMENT_SPEED + event.y/100), Constants.MIN_FLIGHT_SPEED, Constants.MAX_FLIGHT_SPEED);
+            CAMERA_MOVEMENT_SPEED = Utils.clampFloat((float) (CAMERA_MOVEMENT_SPEED + event.y / 100), Constants.MIN_FLIGHT_SPEED, Constants.MAX_FLIGHT_SPEED);
             this.flightSpeedLabel.setText("Current flight speed: " + CAMERA_MOVEMENT_SPEED);
         });
 
@@ -316,7 +316,7 @@ public class GCalcActivity implements IApplication {
 
         root.setMinSize(config.getResolutionX(), config.getResolutionY());
         toggleDynamicGraph.setOnAction(event -> {
-            this.isMovingGraph = this.isMovingGraph.getInversed();
+            this.isMovingGraph = this.isMovingGraph.getInverted();
             LogSystem.log("GCalc", "Toggle dynamic/static graph: " + isMovingGraph);
         });
         updateGraph.setOnAction(event -> {
@@ -328,7 +328,7 @@ public class GCalcActivity implements IApplication {
                 this.isExpressionFailedToBuild.setText("Failed to parse expression.");
                 LogSystem.exception("Expression Build", e);
             }
-            Config newConfig = new Config(config.getAntialiasingSamples(),config.getVSync(),
+            Config newConfig = new Config(config.getAntialiasingSamples(), config.getVSync(),
                     graphEquation.getText(),
                     (int) (aParamSlider.getValue()),
                     new ParamRange(Utils.parseInt(aRangeField.getText()), false),
@@ -348,9 +348,7 @@ public class GCalcActivity implements IApplication {
             updateModel();
         });
 
-        aParamSlider.setOnValueChangedEvent(event -> {
-            aState = (float) aParamSlider.getValue();
-        });
+        aParamSlider.setOnValueChangedEvent(event -> aState = (float) aParamSlider.getValue());
 
         xRangeField.setText(String.valueOf(config.getRangeX().getMax()));
         yRangeField.setText(String.valueOf(config.getRangeY().getMax()));

@@ -14,7 +14,7 @@ public class ConfigManager {
     private static Config config;
 
     private static void defaultConfig() {
-        config = new Config(4,true, "sin(x+y)*a", 2, new ParamRange(5, false), new ParamRange(5, false), new ParamRange(5, false), 800, 600, 512, 64, false);
+        config = new Config(4, true, "sin(x+y)*a", 2, new ParamRange(5, false), new ParamRange(5, false), new ParamRange(5, false), 800, 600, 512, 64, false);
     }
 
     public static void loadConfigFromDisk() {
